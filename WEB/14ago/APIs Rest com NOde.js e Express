@@ -1,0 +1,52 @@
+
+
+HTTP    -   não mantem a ligação, o cliente fica esperando, sem saber oque esta acontecendo
+                enquanto a resposta esta sendo processada, esta acontecendo programação assincrona
+        //tipo    recurso     versão
+        GET/api/alunos/42 HTTP/1.1  
+        //endereço
+        Host: api.uffs.edu.br
+        Acept: aplication/json
+        Authorizarion: Bearer codigo--------
+        //versao do browser
+        User-Agent : Mozilla/5.0
+
+HTTPS   -   
+
+        http codificado para nao ficar tudo aberto igual ao http
+
+cada mensagem do cliente o servidor responde com outra mensagem
+
+cliente->servidor = requisição/request
+servidor->cliente = resposta/response
+
+
+REST    
+    forma de comunicar usando http
+
+    6 configurações
+        get - buscar uma informação (associado ao read)
+        post - enviar (create do crud)
+        put - atualização (update do crud)           put atualiza o obejto inteiro
+        patch - atualização (update do crud)         patch atualiza partes do objeto
+        delete - remover (delete do crud)
+
+        option - nao costuma ser usando
+                    serve para saber quais sao os metodos acima disponiveis
+
+
+URL's
+https://sigaa.uffs.edu.br/sigaa/portais/discente/discente.jsf
+       |-------------------||--------------------------------|
+        host(se mantem)    recurso (muda quando muda as telas)
+
+
+porta padrão http - 80 ou 8080
+porta padrao https - 442
+porta padrão postgre - 5432
+
+
+
+
+
+
