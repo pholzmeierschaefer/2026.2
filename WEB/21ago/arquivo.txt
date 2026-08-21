@@ -1,0 +1,67 @@
+//formas de organizar o codigo back
+
+1° separar os arquivos e modulos conforme o tipo            espalha os arquivos das entidade mas deixa as funcionalidades agrupadas
+        -   modulo de rotas - (get, post, ...)
+            - diretorio com todas as rotas
+                - produtos
+                - clientes
+                - nd
+                - fornecedor
+        - modulo de conexao com o banco
+            - diretorio database
+                - produtos
+                - clientes
+                - ...
+        - modulo de controle
+            - diretorio que coida da logica 
+                - controle de produtos
+                - controle de clientes
+                - ....
+    um arquivo para cada entidade em cada modulo(diretorio)
+
+
+2° separar por entidade
+        - produto
+            - rotas
+            - database
+            - controle
+            - ...
+
+        - clientes
+            - rotas
+            - database
+            - ...
+        
+        -...
+
+
+
+nome pasta
+    nome arquivopasta
+
+dentro de nome arquivopasta
+separar as rotas
+
+tira o /helloworld por exemplo, deixa só o /
+
+copia express
+const variavel = express.nome();
+
+recorta as rotas pro arquivo
+
+substitui o app pelo nome
+
+module.exports = nome;
+
+
+
+--no index
+depois da porta, antes do listen
+
+const nome2 = require('./caminho do arquivo');
+
+depois do listen
+
+app.use('', nome2);
+
+
