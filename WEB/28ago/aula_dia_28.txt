@@ -1,0 +1,104 @@
+DOM
+
+    funções 
+       |
+interface única que todo browser precisa implementar
+
+
+pagina "quebrada" em arvore
+
+            html <- dom                                                 html
+            |                                                  head                      body
+            ---    head                                     title link                  h1  p  p           p
+            |      |                                     texto       atributos                        texto atributos
+            |      title
+            |      link
+            |
+            ----body
+                  |
+                  h1
+                  p
+                  p
+                  p
+
+
+
+document. -> constante do browser que carrega a estrutura de arvore 
+
+            querySelector -> seleção para buscar elemento da arvore
+                por tag (ex: document.querySelector("h1")) - se tiver duas com o mesmo nome, retorna a primeira
+
+                por id (ex: document.querySelector("#par2")) - mostra a com id
+
+                por classe (ex: document.querySelector(".paragrafo")) 
+
+
+innerText - muda o texto
+
+innerHTML - muda o html (negrito, ...)
+
+
+
+criar a pagina no browser
+
+    div -> cria no .html
+
+    const div = document.querySelector(#div)
+
+
+                                      "tipo"
+    const par1 = document.crateElement("p");
+
+
+    par.innerText("paragrafo criado por js")
+
+
+    div.appendChild("par1")
+
+
+
+
+
+
+renderizar no backend    -> php, django, jsf  
+
+        manda a pagina pronta pro cliente pelo servidor
+
+            html, dados, imagens, ...
+
+        vantagem: back mais rapido que o cliente do usuario (maquina melhor)
+
+        desvantagem: toda vez vai tudo pro cliente, cada reload envia tudo isso
+                        trafego de rede maior, mais largura de banda do usuario
+
+
+
+
+
+
+
+
+
+renderizar no cliente  -> react, vue
+
+        manda a pagina em branco, e o js vai junto com a pagina
+            a primeira vez que o usuario acessar é mais lenta pq baixa o js pra maquina
+                nas proximas isso fica no cache
+                só trafega dados e imagens pela rede depois do primeiro acesso
+
+        renderização
+
+
+    vantagem: nao precisa ficar passando tudo pela rede, vai mais rapido pois só recarrega o que é necessario
+
+
+
+
+
+
+
+
+
+
+
+

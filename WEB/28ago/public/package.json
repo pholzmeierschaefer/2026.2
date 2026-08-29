@@ -1,0 +1,16 @@
+{
+  "name": "public",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+  "start": "node main.js",
+  "dev": "nodemon main.js"
+},
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
