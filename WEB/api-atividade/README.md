@@ -14,7 +14,6 @@ API-ATIVIDADE/
 ├── package.json         # Dependências e scripts de execução
 └── yarn.lock
 
-
 ## 2. Função de Cada Arquivo e Onde Mexer
 
 | Arquivo | Função Principal | O que alterar nele |
