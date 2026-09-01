@@ -1,5 +1,8 @@
 # Guia de Estrutura e Modificações do Projeto
 
+2026.2/WEB/api-atividade
+yarn dev
+
 ## 1. Organização das Pastas e Arquivos
 
 ```text
@@ -27,7 +30,7 @@ API-ATIVIDADE/
 
 ---
 
-## 3. Resumo Prático de Alterações
+## 3. Resumo Alterações
 
 * **Alterar textos:** Modifique diretamente no `index.html`. Caso o texto deva mudar dinamicamente via JavaScript após o carregamento da página, altere o valor atribuído no `index.js`.
 * **Alterar cores e fontes:** Faça a estilização padrão diretamente no `style.css`. Utilize `index.js` apenas quando o estilo precisar mudar dinamicamente devido a uma ação do usuário.
