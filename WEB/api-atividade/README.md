@@ -13,6 +13,7 @@ API-ATIVIDADE/
 ├── main.js              # Servidor backend (Express)
 ├── package.json         # Dependências e scripts de execução
 └── yarn.lock
+```
 
 ## 2. Função de Cada Arquivo e Onde Mexer
 
