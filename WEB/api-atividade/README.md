@@ -1,7 +1,8 @@
 # Guia de Estrutura e Modificações do Projeto
 
-2026.2/WEB/api-atividade
-yarn dev
+2026.2/WEB/api-atividade  
+yarn dev  
+localhost:3001  
 
 ## 1. Organização das Pastas e Arquivos
 
