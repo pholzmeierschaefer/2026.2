@@ -1,0 +1,46 @@
+REACT - usado para reusar o max de codigo possivel
+
+
+dom virtual
+cria uma copia da estrutura html em memória
+
+altera somente o item necessário, nao precisando recarregar toda a estrutura a cada pequena mudança
+
+parte ruim - reload forçado volta para a copia original
+
+HOOK
+    funções especiais que permite persistir as alterações feitas na memória
+
+
+--servidor para desenvolvimento--
+
+yarn create vite nomeapp --template reacte
+
+    selecionar linter ESLint
+        instal clica no
+
+cd pasta app
+    yarn install
+
+    yarn dev
+
+remove
+    app.css
+    app.jsx
+    index.cc 
+
+
+
+todo o código fica dentro de src
+main.jsx nao altera nunca
+
+comenta impor do index no main
+
+cria app.jsx no src
+
+
+criar porpias tags - componentes
+    que podem ser reutilizadas nos trechos de codigo
+    sao funções js
+
+
