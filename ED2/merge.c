@@ -95,6 +95,7 @@ void merge(int *vetor, int inicio, int meio, int fim){
 void mergeSort(int *vetor, int inicio, int fim){
     //se inicio < fim significa que tem mais de um elemento no vetor
     if(inicio<fim){
+        //trunca pra baixo, em caso de elementos impares, o subvetor da esquerda fica com o "meio"
         int meio = (inicio+fim)/2;
 
         //chamadas recursivas
@@ -104,7 +105,7 @@ void mergeSort(int *vetor, int inicio, int fim){
         //depois ordena de meio+1 ate o fim
         mergeSort(vetor, meio+1, fim);
 
-        //depois junta, inicio coloca o meio e fim
+        //depois junta, inicio coloca o meio e fim  
         merge(vetor, inicio, meio, fim);
     }
 }
