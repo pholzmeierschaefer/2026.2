@@ -25,12 +25,12 @@ void imprimeVet(int *vetor, int tamanho){
 
 
 void merge(int *vetor, int inicio, int meio, int fim){
-    int i = inicio; //marca o inicio da metade da esquerda
+    int e = inicio; //marca o inicio da metade da esquerda
 
-    int j = meio+1;//marca o inicio da metade da direita
+    int d = meio+1;//marca o inicio da metade da direita
 
 
-    int k = 0; //onde vai ser inserido o prox elemento
+    int prox = 0; //onde vai ser inserido o prox elemento
 
 
 
@@ -46,44 +46,44 @@ void merge(int *vetor, int inicio, int meio, int fim){
 
     
     //loop enquanto ambas as metades tiverem elementos
-    while(i<=meio && j <=fim){
+    while(e<=meio && d <=fim){
         //se elemento i <= elemento j
-        if(vetor[i]<=vetor[j]){
-            // se for copia i na proxima posicao livre k
-            aux[k] = vetor[i];
-            i++;
+        if(vetor[e]<=vetor[d]){
+            // se for copia e na proxima posicao livre prox
+            aux[prox] = vetor[e];
+            e++;
         }
 
         else{
-            //se nao for, copia j (metade direita) para aux
-            aux[k] = vetor[j];
-            j++;
+            //se nao for, copia d (metade direita) para aux
+            aux[prox] = vetor[d];
+            d++;
         }
 
-        k++;
+        prox++;
     }
 
-    //passa aqui, caso i ou j tenham acabado
-    //entra no while se for j que acabou, se nao vai para o while de baixo
-    //loop enquanto existir i para copiar todos os elementos da primeira metade
-    while(i<=meio){
-        aux[k] = vetor[i];
-        i++;
-        k++;
+    //passa aqui, caso e ou d tenham acabado
+    //entra no while se for d que acabou, se nao vai para o while de baixo
+    //loop enquanto existir e para copiar todos os elementos da primeira metade
+    while(e<=meio){
+        aux[prox] = vetor[e];
+        e++;
+        prox++;
     }
 
-    //cai aqui caso tenha sido i que acabou primeiro
-    //loop enquanto existir elementos em j
-    while(j<=fim){
-        aux[k] = vetor[j];
-        j++;
-        k++;
+    //cai aqui caso tenha sido e que acabou primeiro
+    //loop enquanto existir elementos em d
+    while(d<=fim){
+        aux[prox] = vetor[d];
+        d++;
+        prox++;
     }
 
     //for percorrendo todos os elementos de aux
-    for(i = 0; i<tamanho; i++){
-              //inicio mais i para ir progredindo no vetor
-        vetor[inicio+i] = aux[i];
+    for(e = 0; e<tamanho; e++){
+              //inicio mais e para ir progredindo no vetor
+        vetor[inicio+e] = aux[e];
     }
 
     free(aux);
