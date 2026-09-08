@@ -1,6 +1,7 @@
 import "react";
 import Titulo from "./Titulo.jsx"
 import Conteudo from "./Conteudo.jsx";
+import Livro from "./Livro.jsx";
 
 //componente
 //por padrao, nome função = nome do arquivo
@@ -12,9 +13,11 @@ export default function App(){
     //so pode retornar 1 tag html
     // entre a div fica o componente
     return (
-    <div>   
-        <Titulo valor="hello world"/>
-        <Conteudo />
+     
+        <div>
+        <h1>Livros</h1>
+        <Livro />
+    
     </div>
     )
 }

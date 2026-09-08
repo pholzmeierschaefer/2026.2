@@ -1,27 +1,42 @@
 const express = require('express');
-
 const router = express.Router();
-const livros = require('./database');
+let livros = require('./database');
 
-
-//read
+// 1. LISTAR TODOS (Read)
 router.get('/', (req, res) => {
-    const { categoria, busca } = req.query;
-    let resultado = livros;
-
-    if (categoria) {
-        resultado = resultado.filter(l => l.categoria.toLowerCase() === categoria.toLowerCase());
-    }
-
-    if (busca) {
-        resultado = resultado.filter(l =>
-            l.titulo.toLowerCase().includes(busca.toLowerCase()) ||
-            l.autor.toLowerCase().includes(busca.toLowerCase())
-        );
-    }
-
-    res.status(200).json({ total: resultado.length, livros: resultado });
+    res.json({ livros });
 });
 
+// 2. BUSCAR POR ID (Read)
+router.get('/:id', (req, res) => {
+    const livro = livros.find(l => l.id == req.params.id);
+    if (!livro) return res.status(404).send('Não encontrado');
+    res.json(livro);
+});
+
+// 3. ADICIONAR LIVRO (Create)
+router.post('/', (req, res) => {
+    const novo = { id: Date.now(), ...req.body };
+    livros.push(novo);
+    res.status(201).json(novo);
+});
+
+// 4. ATUALIZAR LIVRO (Update)
+router.put('/:id', (req, res) => {
+    const livro = livros.find(l => l.id == req.params.id);
+    if (!livro) return res.status(404).send('Não encontrado');
+    
+    Object.assign(livro, req.body);
+    res.json(livro);
+});
+
+// 5. APAGAR LIVRO (Delete)
+router.delete('/:id', (req, res) => {
+    const index = livros.findIndex(l => l.id == req.params.id);
+    if (index === -1) return res.status(404).send('Não encontrado');
+    
+    livros.splice(index, 1);
+    res.send('Livro removido com sucesso');
+});
 
 module.exports = router;
