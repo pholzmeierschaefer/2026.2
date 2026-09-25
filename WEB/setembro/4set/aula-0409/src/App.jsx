@@ -43,7 +43,9 @@ export default function App() {
 
            
 
-        <Button size = "small" variant="outlined" onClick={() => setEsconderTabela(!esconderTabela)} >mostrar ou esconder tabela </Button>
+        <Button size = "small" variant="outlined" onClick={() => setEsconderTabela(!esconderTabela)} color="gray">
+          mostrar ou esconder tabela
+        </Button>
 
       
       

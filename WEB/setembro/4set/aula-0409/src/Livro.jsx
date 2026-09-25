@@ -44,9 +44,10 @@ export default function Livro() {
             label="Digite o id do livro"
             variant="outlined"
             size="small"
+            color="gray"
           />
 
-          <Button variant="contained" onClick={buscarLivro} size="medium">
+          <Button variant="contained" onClick={buscarLivro} size="medium" color="success">
             Buscar Livro
           </Button>
         </Stack>
@@ -66,7 +67,9 @@ export default function Livro() {
               Autor: {livro.autor}
             </Typography>
           </CardContent>
-          
+          <CardActions>
+            <Button variant="outlined" startIcon={<DeleteIcon/>} onClick={limpar} size="small" color="error">Delete</Button>
+          </CardActions>
         </Card>
       )}
     </Stack>
