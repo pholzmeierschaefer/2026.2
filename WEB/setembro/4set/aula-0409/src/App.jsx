@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Livro from "./Livro.jsx";
 import Tabela from "./Tabela.jsx";
+import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 
 
@@ -28,19 +31,27 @@ export default function App() {
   
 
   return (
-    <div>
+
+
+
+    <Container maxWidth="sm">
       <h1>Livros</h1>
       {!esconderTabela && 
         <Tabela dados={livros} />
       }
 
-      <button onClick={() => setEsconderTabela(!esconderTabela)}>mostrar ou esconder tabela</button>
+
+           
+
+        <Button size = "small" variant="outlined" onClick={() => setEsconderTabela(!esconderTabela)} >mostrar ou esconder tabela </Button>
+
+      
       
        <p></p>
 
       <Livro setEsconderTabela={setEsconderTabela} />
       
     
-    </div>
+    </Container>
   );
 }
