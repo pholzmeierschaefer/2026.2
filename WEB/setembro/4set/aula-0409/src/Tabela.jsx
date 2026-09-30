@@ -5,37 +5,42 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function Tabela({dados}) {
-  
-
+export default function Tabela({ dados, onDeletar }) {
   return (
-    <TableContainer component={Paper} sx={{ maxWidth: 450, width: "100%" }}>
-      <Table aria-label="tabela de livros" size="small">
+    <TableContainer component={Paper} variant="outlined" sx={{ mt: 2 }}>
+      <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell sx={{ width: 60, fontWeight: "bold" }}>ID</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Titulo</TableCell>
+            <TableCell><strong>ID</strong></TableCell>
+            <TableCell><strong>Título</strong></TableCell>
+            <TableCell><strong>Autor</strong></TableCell>
+            {onDeletar && <TableCell align="center"><strong>Ações</strong></TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
-          {dados &&
-            dados.map((item) => (
-              <TableRow
-                key={item.id}
-                hover
-                sx={{
-                  "&:last-child td, &:last-child th": { border: 0 },
-                  cursor: "pointer",
-                }}
-                
-              >
-                <TableCell component="th" scope="row">
-                  {item.id}
-                </TableCell>
-                <TableCell>{item.titulo}</TableCell>
+          {dados.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={4} align="center">Nenhum livro cadastrado.</TableCell>
+            </TableRow>
+          ) : (
+            dados.map((livro) => (
+              <TableRow key={livro.id}>
+                <TableCell>{livro.id}</TableCell>
+                <TableCell>{livro.titulo}</TableCell>
+                <TableCell>{livro.autor}</TableCell>
+                {onDeletar && (
+                  <TableCell align="center">
+                    <IconButton color="error" size="small" onClick={() => onDeletar(livro.id)}>
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                )}
               </TableRow>
-            ))}
+            ))
+          )}
         </TableBody>
       </Table>
     </TableContainer>
