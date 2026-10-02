@@ -1,0 +1,135 @@
+gemini
+
+====================================================================
+RESUMO DE AULA: BACKEND (EXPRESS) + POSTGRESQL + PROMISES
+====================================================================
+
+1. CONCEITO DE PROMISES (ASSINCRONISMO NO JS)
+--------------------------------------------------------------------
+- Problema: Operações de E/S (leitura de arquivos, chamadas HTTP, 
+  consultas a banco) demoram. Se o código travasse esperando a 
+  resposta, a aplicação inteira ficaria bloqueada.
+- No JS, o código subsequente continua executando enquanto a Promise 
+  está sendo processada.
+- Estados de uma Promise:
+  * Pending (Pendente): Foi disparada e está aguardando retorno/cálculo.
+  * Fulfilled/Resolved (Cumprida): Retornou o resultado com sucesso.
+  * Rejected (Rejeitada): Falhou, deu timeout ou ocorreu um erro.
+- Timeout automático: Toda Promise no JS possui um limite padrão de tempo; 
+  se estourar, cai automaticamente em erro/rejeição.
+- Por que usar no Backend com Banco?
+  Em cenários reais, o banco de dados geralmente roda em uma máquina ou 
+  servidor separado do Express. Consultas em disco e de rede levam tempo; 
+  por isso, o acesso precisa ser estritamente assíncrono.
+
+
+2. CONFIGURAÇÃO DO AMBIENTE (LINUX/LAB) E BANCO
+--------------------------------------------------------------------
+- Iniciar o serviço do PostgreSQL (quando não estiver rodando):
+    sudo systemctl enable postgresql
+    sudo systemctl start postgresql
+
+- pgAdmin:
+  1. Registrar novo servidor:
+     * General -> Name: Identificação própria
+     * Connection -> Host name: localhost
+     * Username: postgres
+     * Password: postgres (ou a senha padrão definida)
+  2. Criar banco de dados:
+     * Botão direito em "Databases" -> Create -> Database
+     * Nome do banco (ex: devweb20262) -> Save.
+  3. Importar estrutura e dados (script .sql):
+     * Botão direito no banco criado -> Query Tool.
+     * Colar os comandos do arquivo SQL (ex: tabelas de biblioteca) 
+       e executar (botão Play / F5).
+
+
+3. CONFIGURAÇÃO DO BACKEND (NODE.JS / EXPRESS)
+--------------------------------------------------------------------
+- Dependências essenciais:
+    express, cors, pg-promise
+
+- Instalação:
+    yarn add pg-promise
+    (ou: npm install pg-promise)
+
+- Configuração inicial e string de conexão (main.js):
+    const express = require('express');
+    const cors = require('cors');
+    const pgp = require('pg-promise')();
+
+    const app = express();
+    const PORTA = 3001;
+
+    // String de conexão: protocolo://usuario:senha@host:porta/banco
+    const db = pgp('postgres://postgres:postgres@localhost:5432/devweb20262');
+
+    app.use(express.json());
+    app.use(cors());
+
+    app.listen(PORTA, () => {
+      console.log(`Servidor rodando na porta ${PORTA}`);
+    });
+
+
+4. MÉTODOS DE CONSULTA DO PG-PROMISE
+--------------------------------------------------------------------
+- db.one: Retorna exatamente UM registro (gera erro se retornar 0 ou >1).
+- db.any: Retorna VÁRIOS registros (retorna array, inclusive vazio se 0).
+- db.none: Executa comando que NÃO RETORNA dados (ex: INSERT/UPDATE sem retorno).
+- Observação de sintaxe: No pg-promise, NÃO se deve colocar ponto e vírgula 
+  (;) no final da string SQL.
+
+
+5. PADRÕES DE CONSUMO: PROMISE TRADICIONAL (.then/.catch) vs ASYNC/AWAIT
+--------------------------------------------------------------------
+
+[A] Abordagem com Promises (.then / .catch):
+    app.get('/livros-sincrono', (req, res) => {
+      const sql = 'select * from livros';
+      db.any(sql)
+        .then((livros) => res.status(200).json(livros))
+        .catch((erro) => res.status(400).json(erro));
+    });
+
+[B] Abordagem Moderna com async/await e try/catch:
+    app.get('/livros', async (req, res) => {
+      const sql = 'select * from livros';
+      try {
+        const livros = await db.any(sql);
+        res.status(200).json(livros);
+      } catch (erro) {
+        res.status(400).json(erro);
+      }
+    });
+    * Vantagem do async/await: Código linear, mais legível, e permite 
+      agrupar múltiplas consultas sequenciais sob um único bloco try/catch.
+
+
+6. SEGURANÇA E SQL INJECTION (PARÂMETROS PREPARADOS)
+--------------------------------------------------------------------
+- O Risco (Vulnerabilidade Crítica):
+  NUNCA concatenar valores de entrada na consulta:
+    // ERRADO / VULNERÁVEL:
+    const sql = `select * from livros where id = ${req.params.id}`;
+    const sql = "select * from livros where id = " + req.params.id;
+  Um invasor pode injetar comandos maliciosos via URL/body (ex: '; DROP DATABASE;').
+
+- A Solução (Placeholders / Parâmetros do pg-promise):
+  Utilizar placeholders indexados com cifrão ($1, $2, ...) e passar 
+  os valores em um array como segundo argumento da chamada:
+
+    app.get('/livros/:id', async (req, res) => {
+      const id = req.params.id;
+      const sql = 'select * from livros where id = $1';
+      try {
+        const livros = await db.any(sql, [id]);
+        res.status(200).json(livros);
+      } catch (erro) {
+        res.status(400).json(erro);
+      }
+    });
+
+- A biblioteca trata, sanitiza e escapa os dados automaticamente, 
+  neutralizando qualquer tentativa de injeção de código.
+====================================================================
