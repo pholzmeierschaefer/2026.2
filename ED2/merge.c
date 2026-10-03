@@ -101,7 +101,7 @@ void mergeSort(int *vetor, int inicio, int fim){
         //chamadas recursivas
         //primeiro, ordena inicio ate o meio
         mergeSort(vetor, inicio, meio);
-
+a
         //depois ordena de meio+1 ate o fim
         mergeSort(vetor, meio+1, fim);
 
