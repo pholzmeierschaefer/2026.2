@@ -1,0 +1,181 @@
+================================================================================
+RESUMO DE AULA: ARQUITETURA BACKEND, MVC, PROMISES E BANCO DE DADOS
+Disciplina: GEX613 - Programação II / UFFS Campus Chapecó
+Docente: Prof. Dr. Giancarlo D. Salton
+Data de Referência: 06/10/2026
+================================================================================
+
+1. PRINCÍPIOS FUNDAMENTAIS DE DESIGN DE SOFTWARE
+--------------------------------------------------------------------------------
+- Princípio DRY (Don't Repeat Yourself):
+  * Formulado por Hunt & Thomas: "Todo pedaço de conhecimento deve ter uma
+    representação única, não ambígua e definitiva dentro de um sistema."
+  * O problema real que o DRY combate é a duplicação de conhecimento de domínio
+    (regras de validação, cálculos de negócio e queries SQL repetidas em várias rotas).
+  * Centralização de regras (ex.: validação de CPF ou matrícula): se a regra muda,
+    altera-se em exatamente um ponto e a mudança propaga-se automaticamente.
+
+- Separação de Responsabilidades (Separation of Concerns - SoC):
+  * Cada camada ou módulo possui uma responsabilidade única e bem delimitada:
+    1. Dados: como os dados são estruturados, persistidos e validados estruturalmente.
+    2. Lógica da Aplicação: orquestração de fluxo, regras operacionais e serviços.
+    3. Apresentação: formatação e entrega da resposta ao cliente (JSON em APIs REST).
+
+- Tomada de Decisão: Filtragem em Código vs. Filtragem no Banco (SQL):
+  * Dica prática discutida em aula: em cenários específicos, pode ser mais
+    vantajoso e ágil trazer os dados brutos e aplicar certos filtros ou contagens
+    diretamente no código da aplicação (ex.: descartar registros inativos ou filtrar
+    autores falecidos via código), evitando queries SQL excessivamente densas.
+  * Por outro lado, para volumes massivos de dados, paginação e relatórios pesados,
+    o processamento e agrupamento direto no SGBD é mandatório para desempenho.
+
+
+2. ARQUITETURA EM 4 CAMADAS (RESOLVENDO O "FAT CONTROLLER")
+--------------------------------------------------------------------------------
+O modelo tradicional MVC (Model-View-Controller) frequentemente sofre com o
+anti-padrão Fat Controller (controlador com excesso de linhas acumulando regras,
+validações e SQL). Para resolver isso de forma profissional, a arquitetura foi
+decomposta em 4 camadas sequenciais:
+
+[Cliente / HTTP Request]
+         │
+         ▼
+1. ROUTER (Rotas HTTP):
+   - Mapeamento declarativo entre a URL, o verbo HTTP e a função do Controller.
+   - Não contém regras de negócio nem SQL.
+   - Exemplo: router.get('/autores', autoresController.listar);
+         │
+         ▼
+2. CONTROLLER (Controle de Entrada/Saída HTTP):
+   - Ponto de contato com o protocolo HTTP: extrai dados de req (params, body, query).
+   - Não executa queries SQL diretamente.
+   - Chama a camada de Service e define o status HTTP de resposta (200, 201, 400, 404, 500).
+         │
+         ▼
+3. SERVICE (Camada de Negócio e Validações):
+   - Onde residem a inteligência e as regras da aplicação.
+   - Validações de domínio (formato de email, integridade de campos, regras de negócio).
+   - Regras financeiras e cálculos (impostos, descontos, deduções).
+   - Orquestra chamadas entre múltiplos repositórios ou modelos quando necessário.
+         │
+         ▼
+4. REPOSITORY (Persistência e Acesso a Dados):
+   - Contato exclusivo com o banco de dados.
+   - Executa os comandos SQL puros (SELECT, INSERT, UPDATE, DELETE).
+   - Isola o SGBD: alterações de schema ou de driver afetam apenas o Repository.
+
+
+3. PADRÕES DE ESTRUTURA DE PASTAS NO PROJETO
+--------------------------------------------------------------------------------
+Em aula foram confrontadas as duas abordagens para organização de arquivos:
+
+Formato 1: Por Tipo de Responsabilidade (Estrutura Técnica Tradicional)
+  src/
+    routes/        (autores.routes.js, livros.routes.js)
+    controllers/   (autores.controller.js, livros.controller.js)
+    services/      (autores.service.js, livros.service.js)
+    repositories/  (autores.repository.js, livros.repository.js)
+    database/      (conexao.js)
+  * Vantagem: Fácil para quem está iniciando identificar onde ficam os arquivos de cada tipo.
+  * Desvantagem: Manutenções em uma entidade exigem navegar por pastas diferentes.
+
+Formato 2: Por Modelo / Domínio / Funcionalidade (Feature-based - Recomendado)
+  src/
+    autores/
+      autores.routes.js
+      autores.controller.js
+      autores.service.js
+      autores.repository.js
+    livros/
+      livros.routes.js
+      livros.controller.js
+      livros.service.js
+      livros.repository.js
+    dashboard/     (features que agregam dados de múltiplos domínios)
+      dashboard.routes.js
+      dashboard.service.js
+    database/      (pool de conexão centralizado)
+  * Vantagem: Alta coesão e baixo acoplamento. Qualquer modificação na entidade
+    "Autores" ocorre exclusivamente dentro do diretório correspondente.
+
+
+4. TRATAMENTO ASSÍNCRONO: PROMISES, ASYNC/AWAIT E MANIPULAÇÃO DE ERROS
+--------------------------------------------------------------------------------
+- Ciclo de Vida de uma Promise:
+  * Estados: Pending -> Fulfilled (sucesso) ou Rejected (falha).
+  * Estados resolvidos ou rejeitados são finais e imutáveis.
+
+- async / await:
+  * Açúcar sintático sobre Promises que torna o código assíncrono visualmente sequencial.
+  * CUIDADO: Esquecer a palavra-chave "await" antes de uma chamada ao banco de dados
+    atribui a Promise pendente à variável em vez do resultado, gerando bugs silenciosos.
+
+- Combinadores de Concorrência:
+  * Promise.all([p1, p2]): Executa em paralelo operações independentes. Falha
+    imediatamente se alguma for rejeitada.
+  * Promise.allSettled(): Aguarda a resolução de todas as Promises, independentemente
+    de sucessos ou falhas.
+  * Promise.race(): Resolve ou rejeita com o resultado da primeira que terminar.
+
+- Padrão asyncHandler (DRY no Tratamento de Erros):
+  * Em funções assíncronas no Express, exceções não tratadas podem deixar o cliente
+    em espera até estourar timeout.
+  * O wrapper asyncHandler encapsula as rotas com Promise.resolve(fn(...)).catch(next),
+    eliminando try/catch repetitivo em cada endpoint e enviando erros diretamente
+    para o middleware central de tratamento de erros.
+
+
+5. INTEGRAÇÃO COM POSTGRESQL: PG-PROMISE VS. SEQUELIZE
+--------------------------------------------------------------------------------
+- pg-promise (Driver Direto com Promises):
+  * Utilizado no projeto prático da aula (vide package.json).
+  * Foco em controle total do SQL, queries complexas e alto rendimento.
+  * Prevenção de SQL Injection obrigatória através de placeholders ($1, $2) ou
+    parâmetros nomeados ($(campo)).
+  * Métodos com semântica estrita:
+    - db.any(sql, params): Retorna array com 0 ou mais registros.
+    - db.one(sql, params): Espera exatamente 1 registro (lança erro se retornar 0 ou 2+).
+    - db.oneOrNone(sql, params): Retorna 1 registro ou null (ideal para busca por ID).
+    - db.none(sql, params): Executa operações sem retorno (ex.: DELETE sem RETURNING).
+  * Transações Atômicas (db.tx):
+    Garante execução "tudo ou nada" (ACID). Se qualquer instrução interna lançar
+    erro, um ROLLBACK automático é executado.
+
+- Sequelize (ORM - Object-Relational Mapping):
+  * Abstrai o SQL tradicional, mapeando tabelas em classes/modelos JavaScript.
+  * Utiliza convenção models/index.js para carregamento dinâmico e execução de associações.
+  * Gerencia controle de versão do banco de dados através de Migrations (up/down).
+
+
+6. ESTUDO DE CASO PRÁTICO: SISTEMA DE BIBLIOTECA
+--------------------------------------------------------------------------------
+Baseado nos arquivos da aplicação analisados em aula:
+
+A. Stack do Projeto (package.json e main.js):
+   - Node.js com Express (^5.2.1) e pg-promise (^12.7.1).
+   - Servidor inicializado na porta 3001.
+   - Ponto de entrada (main.js) desacoplado, delegando o roteamento para
+     "./src/autores/autores.routes".
+
+B. Modelagem de Dados (biblioteca.sql):
+   - Tabelas e Entidades:
+     1. autores: id, nome, nacionalidade, ano_nascimento.
+     2. livros: autor_id (FK), titulo, isbn (UNIQUE), editora, paginas, ano_publicacao, categoria (ENUM).
+     3. leitores: nome, email (UNIQUE), telefone, ativo.
+     4. emprestimos: leitor_id (FK), livro_id (FK), data_emprestimo, data_prevista, data_devolucao.
+
+C. Regras de Negócio Implementadas no Banco:
+   - Integridade Referencial Estrita: ON DELETE RESTRICT em livros e empréstimos,
+     impedindo que autores ou leitores com histórico ativo sejam excluídos por engano.
+   - Regra de Empréstimo Único Aberto por Livro:
+     Garantida via índice único parcial:
+     CREATE UNIQUE INDEX uq_emprestimo_aberto_por_livro
+         ON emprestimos (livro_id)
+         WHERE data_devolucao IS NULL;
+     Impede via banco que um exemplar já emprestado seja alocado novamente
+     enquanto a devolução não for registrada.
+   - Cenário de Dashboard:
+     Cruzamento relacional entre empréstimos em atraso (data_prevista expirada e
+     data_devolucao nula) trazendo nome do leitor e título do livro, ilustrando a
+     necessidade de um Controller/Service de Dashboard modular.
+================================================================================
