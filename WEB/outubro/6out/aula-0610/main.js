@@ -7,6 +7,8 @@ const livrosRoutes = require("./src/livros/livros.routes");
 const app = express();
 const PORT = 3001;
 
+app.use(express.json());
+
 app.use(autoresRoutes);
 app.use(emprestimosRoutes);
 app.use(leitoresRoutes);
