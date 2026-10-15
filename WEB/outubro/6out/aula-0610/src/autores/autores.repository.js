@@ -11,15 +11,15 @@ async function buscarPorId(id) {
 
 async function criar(autor){
     return db.one(
-        "INSERT INTO autores (nome) VALUES ($1) RETURNING *",
-        [autor.nome]
+        "INSERT INTO autores (nome, nacionalidade, ano_nascimento) VALUES ($1, $2, $3) RETURNING *",
+        [autor.nome, autor.nacionalidade, autor.ano_nascimento]
     )
 }
 
 
 async function atualizar(id, autor){
-    return db.oneOrNone("UPDATE autores SET nome = $1 WHERE id = $2 RETURNING *",
-        [autor.nome, id]
+    return db.oneOrNone("UPDATE autores SET nome = $1, nacionalidade = $2, ano_nascimento = $3 WHERE id = $4 RETURNING *",
+        [autor.nome, autor.nacionalidade, autor.ano_nascimento, id]
     )
 }
 
