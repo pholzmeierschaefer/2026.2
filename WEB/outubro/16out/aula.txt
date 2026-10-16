@@ -1,2 +1,185 @@
 ORM
 
+================================================================================
+
+                    RESUMO DA AULA: INTRODUÇÃO AO ORM E SEQUELIZE
+
+================================================================================
+
+
+
+1. INTRODUÇÃO E CONCEITO DE ORM (OBJECT-RELATIONAL MAPPING)
+
+--------------------------------------------------------------------------------
+
+- Contextualização: No modelo anterior (SQL embutido em repositórios/rotas),
+
+  qualquer alteração estrutural no banco de dados (ex.: adicionar campos, alterar
+
+  tabelas) exigia a revisão manual de múltiplos comandos SELECT/INSERT/UPDATE
+
+  espalhados pela aplicação.
+
+- Definição: O ORM abstrai a camada de dados, mapeando tabelas relacionais em
+
+  objetos manipuláveis diretamente pela linguagem de programação (JavaScript).
+
+- Biblioteca adotada: Sequelize (uma das ferramentas mais consolidadas,
+
+  testadas e documentadas no ecossistema Node.js).
+
+
+
+2. VANTAGENS DO USO DE UM ORM
+
+--------------------------------------------------------------------------------
+
+- Independência de SGBD (Portabilidade):
+
+  A troca de motor (ex.: de PostgreSQL para MySQL, Oracle ou SQLite) exige apenas
+
+  a alteração de configurações de conexão (dialeto e credenciais), sem necessidade
+
+  de reescrever consultas SQL.
+
+- Segurança Embutida:
+
+  Proteção nativa contra ataques de SQL Injection, parametrizando dados de entrada.
+
+- Validação no Próprio Modelo:
+
+  Regras de integridade (tipo de dado, tamanho de caracteres, campos obrigatórios/nulos)
+
+  são validadas antes de atingir o banco.
+
+- Manutenibilidade e Produtividade:
+
+  Redução de código repetitivo (*boilerplate*) e centralização das regras de banco.
+
+
+
+3. CONFIGURAÇÃO DA CONEXÃO
+
+--------------------------------------------------------------------------------
+
+A instância do Sequelize gerencia a comunicação com o banco:
+
+- Parâmetros principais:
+
+  * Nome do banco de dados (database)
+
+  * Usuário (username)
+
+  * Senha (password)
+
+  * Endereço do host (ex.: 'localhost')
+
+  * Porta
+
+  * Dialeto ('dialect'): define a linguagem do SGBD (ex.: 'postgres', 'mysql', 'oracle')
+
+
+
+4. MAPEAMENTO DE TABELAS (DEFINIÇÃO DE MODELOS)
+
+--------------------------------------------------------------------------------
+
+Exemplo aplicado na aula: Tabela "Autores".
+
+
+
+- Definição básica:
+
+  Utiliza-se o método `sequelize.define('NomeDoModelo', { atributos }, { opções })`.
+
+
+
+- Configuração de Colunas/Atributos:
+
+  * Tipos de dados: tipos nativos do Sequelize (ex.: STRING, INTEGER).
+
+  * Chave Primária (ID): frequentemente gerenciada por tipo serial/auto-increment.
+
+  * Validações: `allowNull: false` para colunas com restrição NOT NULL.
+
+  * Mapeamento de nomes de colunas (`field`):
+
+    Permite usar a convenção camelCase no código (ex.: `anoNascimento`) apontando
+
+    para o formato snake_case da base de dados (ex.: `ano_nascimento`).
+
+
+
+- Opções Adicionais do Modelo:
+
+  * `timestamps: true`: gerencia automaticamente os campos `createdAt` e `updatedAt`.
+
+  * `tableName: 'autores'`: mapeia o nome real/pluralizado da tabela no banco.
+
+  * Modo Paranoid (mencionado para aulas seguintes): soft delete via `deletedAt`.
+
+
+
+5. OPERAÇÕES CRUD COM O SEQUELIZE (REPOSITÓRIOS)
+
+--------------------------------------------------------------------------------
+
+Substituição das consultas SQL manuais pelos métodos de abstração:
+
+
+
+- Listagem Geral (SELECT * FROM ... ORDER BY ...):
+
+  * Método: `Model.findAll({ order: [['campo', 'ASC' | 'DESC']] })`
+
+  * Suporta múltiplos critérios de ordenação.
+
+
+
+- Busca por Chave Primária (SELECT * FROM ... WHERE id = ...):
+
+  * Método: `Model.findByPk(id)`
+
+
+
+- Criação / Inserção (INSERT INTO ...):
+
+  * Método: `Model.create(dados)`
+
+  * Não requer o envio de IDs seriais nem das datas de timestamps.
+
+  * Retorna o objeto completo recém-criado, incluindo o ID gerado.
+
+
+
+- Atualização (UPDATE ... WHERE id = ...):
+
+  * Fluxo: Busca o registro via `findByPk(id)`; existindo, invoca `registro.update(dados)`.
+
+  * Atualiza automaticamente o campo `updatedAt`.
+
+
+
+- Deleção (DELETE FROM ... WHERE id = ...):
+
+  * Fluxo: Localiza o objeto e invoca `registro.destroy()`.
+
+  * Executa deleção física ou lógica (caso `paranoid` esteja ativado).
+
+
+
+6. ATIVIDADES E PRÓXIMOS PASSOS
+
+--------------------------------------------------------------------------------
+
+- O código-fonte de exemplo para "Autores" foi disponibilizado no SIGAA.
+
+- Tarefa prática dos alunos:
+
+  * Implementar o modelo e o CRUD completo para as entidades "Livros" e "Leitores".
+
+- Próximo tópico:
+
+  * Tratamento de Chaves Estrangeiras (Foreign Keys / Relacionamentos) na tabela "Empréstimos".
+
+================================================================================
