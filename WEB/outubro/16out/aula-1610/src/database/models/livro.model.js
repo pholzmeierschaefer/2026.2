@@ -52,4 +52,16 @@ const Livro = sequelize.define(
     },
 );
 
+Livro.associate = (models) => {
+    Livro.belongsTo(models.Autor, {
+        foreignKey: "autorID",
+        as: "autor",
+    });
+
+    Livro.hasMany(models.Emprestimo, {
+        foreignKey: "livroID",
+        as: "emprestimos",
+    });
+}
+
 module.exports = Livro;

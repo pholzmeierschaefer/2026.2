@@ -1,7 +1,13 @@
 const { Livro } = require("../database/models");
 
 async function listar() {
-    return Livro.findAll({ order: [["titulo", "ASC"]] });
+    return Livro.findAll({ 
+        include: {
+            model: Autor,
+            as: "autor",
+        },
+        
+        order: [["titulo", "ASC"]] });
 }
 
 async function buscarPorId(id) {

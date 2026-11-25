@@ -30,4 +30,12 @@ const Autor = sequelize.define(
     },
 );
 
+Autor.associate = (models) => {
+    Autor.hasMany(models.Livro, {
+        foreignKey: "autorId",
+        as: "livros",
+    });
+}
+
+
 module.exports = Autor;

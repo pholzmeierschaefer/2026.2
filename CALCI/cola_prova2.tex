@@ -1,0 +1,1075 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{lmodern}
+\usepackage[margin=1.4cm]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{multicol}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{booktabs,array}
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{fillbetween}
+\setlist{nosep,leftmargin=*}
+\renewcommand{\arraystretch}{1.5}
+\DeclareMathOperator{\sen}{sen}
+\DeclareMathOperator{\tg}{tg}
+\DeclareMathOperator{\cotg}{cotg}
+\DeclareMathOperator{\cosec}{cosec}
+\DeclareMathOperator{\arcsen}{arcsen}
+\DeclareMathOperator{\arctg}{arctg}
+\DeclareMathOperator{\arccotg}{arccotg}
+\DeclareMathOperator{\arcsec}{arcsec}
+\DeclareMathOperator{\arccosec}{arccosec}
+\DeclareMathOperator{\senh}{senh}
+\DeclareMathOperator{\tgh}{tgh}
+\newtcolorbox{teo}[1][Teorema]{breakable,colback=blue!4,colframe=blue!55!black,fonttitle=\bfseries,title={#1}}
+\newtcolorbox{defi}[1][Definição]{breakable,colback=gray!6,colframe=gray!60!black,fonttitle=\bfseries,title={#1}}
+\newtcolorbox{dica}[1][Dica]{breakable,colback=green!5,colframe=green!45!black,fonttitle=\bfseries,title={#1}}
+\newtcolorbox{cuidado}[1][Cuidado!]{breakable,colback=red!5,colframe=red!65!black,fonttitle=\bfseries,title={#1}}
+\newif\ifresolucao
+\resolucaotrue % ATENÇÃO: a resolução da prova tem NÚMEROS (proibido na cola). Troque para \resolucaofalse antes de imprimir a cola da prova.
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+
+\begin{document}
+
+% ==============================================================================
+% CABECALHO
+% ==============================================================================
+\begin{center}
+    {\Large\bfseries Cola --- Cálculo I --- Prova 2}\\[2pt]
+    {\large\bfseries Exponenciais, Integrais, Áreas e Volumes}\\[4pt]
+    {\small Universidade Federal da Fronteira Sul (UFFS) \quad|\quad Ciência da Computação \quad|\quad Prof.\ Pedro A.\ P.\ Borges}\\[2pt]
+    {\small Referência: Leithold, \textit{O Cálculo com Geometria Analítica}, 3ª ed., v.\ 1 (Listas: p.\ 462, 294, 302, 351, 359, 382)}\\[6pt]
+    \rule{\linewidth}{0.6pt}\\[4pt]
+    Aluno(a): \underline{\hspace{9cm}} \hfill Data: \_\_ / \_\_ / \_\_\_\_
+\end{center}
+
+\begin{dica}[Como usar esta cola (sem exemplos numéricos, conforme regra da prova)]
+    \begin{itemize}
+        \item \textbf{Caixas azuis:} Teoremas e fórmulas principais. \textbf{Caixas cinzas:} Definições e interpretações.
+        \item \textbf{Caixas verdes:} Macetes algébricos e passos práticos ("como fazer e entender rápido"). \textbf{Caixas vermelhas:} Armadilhas clássicas de prova.
+        \item \textbf{Antes de imprimir para a prova:} mude \verb|\resolucaotrue| para \verb|\resolucaofalse| no preâmbulo para ocultar a seção final (que contém números).
+    \end{itemize}
+\end{dica}
+
+{\small
+\tableofcontents
+}
+\vspace{4pt}
+\hrule
+
+% ==============================================================================
+% 1. ALGEBRA RAPIDA
+% ==============================================================================
+\section{Álgebra Rápida (Dicas Algébricas de Sobrevivência)}
+
+Em Cálculo I, quase todo erro em derivadas e integrais nasce na álgebra básica (principalmente ao reescrever potências, raízes e frações antes de integrar). Use esta seção como ferramenta de tradução.
+
+\subsection{Frações, Potências e Raízes}
+\begin{multicols}{2}
+\textbf{Operações com frações:}
+\begin{itemize}
+    \item Soma/subtração: $\displaystyle \frac{a}{b} \pm \frac{c}{d} = \frac{ad \pm bc}{bd}$
+    \item Produto: $\displaystyle \frac{a}{b} \cdot \frac{c}{d} = \frac{ac}{bd}$
+    \item Divisão (mantém a 1ª e inverte a 2ª):
+          $\displaystyle \frac{a/b}{c/d} = \frac{a}{b}\cdot\frac{d}{c} = \frac{ad}{bc}$
+    \item Fração composta:
+          $\displaystyle \frac{a}{b/c} = \frac{ac}{b}, \qquad \frac{a/b}{c} = \frac{a}{bc}$
+\end{itemize}
+
+\columnbreak
+
+\textbf{Potências e radiciação (essencial para integrar!):}
+\begin{itemize}
+    \item Raiz vira expoente fracionário: $\displaystyle \sqrt[n]{x^m} = x^{m/n}$
+    \item Caso clássico: $\displaystyle \sqrt{x} = x^{1/2}, \quad \frac{1}{\sqrt{x}} = x^{-1/2}$
+    \item Potência no denominador sobe com sinal trocado: $\displaystyle \frac{1}{x^n} = x^{-n}$
+    \item Produto e quociente de mesma base:
+          $\displaystyle x^a \cdot x^b = x^{a+b}, \quad \frac{x^a}{x^b} = x^{a-b}$
+    \item Potência de potência e expoente zero:
+          $\displaystyle (x^a)^b = x^{ab}, \quad x^0 = 1 \; (x \neq 0)$
+    \item Radical de produto/quociente ($a,b \ge 0$, $b\neq 0$):
+          $\displaystyle \sqrt{ab} = \sqrt{a}\sqrt{b}, \quad \sqrt{\frac{a}{b}} = \frac{\sqrt{a}}{\sqrt{b}}$
+\end{itemize}
+\end{multicols}
+
+\subsection{Produtos Notáveis, Fatoração, Bhaskara e Parábola}
+\begin{tabular}{>{$\displaystyle}l<{$} @{\qquad} >{$\displaystyle}l<{$}}
+\toprule
+\text{Identidade} & \text{Uso típico em Cálculo} \\
+\midrule
+(a \pm b)^2 = a^2 \pm 2ab + b^2 & \text{Expandir antes de integrar (quando não há } u'\text{ fora)} \\
+a^2 - b^2 = (a - b)(a + b) & \text{Fatorar limites e racionalizar raízes} \\
+(a \pm b)^3 = a^3 \pm 3a^2b + 3ab^2 \pm b^3 & \text{Expandir cubos de binômios} \\
+a^3 - b^3 = (a - b)(a^2 + ab + b^2) & \text{Dividir/fatorar numeradores cúbicos} \\
+a^3 + b^3 = (a + b)(a^2 - ab + b^2) & \text{Fatorar soma de cubos} \\
+\bottomrule
+\end{tabular}
+
+\begin{itemize}
+    \item \textbf{Fator comum e agrupamento:} $ab + ac = a(b+c)$; \quad $ax + ay + bx + by = a(x+y) + b(x+y) = (a+b)(x+y)$.
+    \item \textbf{Equação do 2º grau ($ax^2 + bx + c = 0$, $a \neq 0$):}
+          $\displaystyle \Delta = b^2 - 4ac, \qquad x = \frac{-b \pm \sqrt{\Delta}}{2a}$.
+          Com raízes $r_1, r_2$: $\displaystyle ax^2 + bx + c = a(x-r_1)(x-r_2)$.
+    \item \textbf{Completar quadrado:}
+          $\displaystyle ax^2 + bx + c = a\!\left(x + \frac{b}{2a}\right)^2 + \left(c - \frac{b^2}{4a}\right)$.
+          Útil em substituição trigonométrica e para achar o vértice!
+    \item \textbf{Vértice e concavidade da parábola ($y = ax^2 + bx + c$):}
+          $\displaystyle x_v = -\frac{b}{2a}, \quad y_v = f(x_v) = -\frac{\Delta}{4a}$.
+          Se $a > 0$: concavidade para cima ($\cup$, mínimo). Se $a < 0$: concavidade para baixo ($\cap$, máximo).
+    \item \textbf{Divisão de polinômios (quando $\operatorname{grau}(P) \ge \operatorname{grau}(D)$):}
+          Divida $P(x)$ por $D(x)$ para obter quociente $Q(x)$ e resto $R(x)$ ($\operatorname{grau}(R) < \operatorname{grau}(D)$):
+          \[
+              \frac{P(x)}{D(x)} = Q(x) + \frac{R(x)}{D(x)}.
+          \]
+    \item \textbf{Racionalização pelo conjugado:}
+          $\displaystyle \frac{A}{\sqrt{B} \pm \sqrt{C}} = \frac{A(\sqrt{B} \mp \sqrt{C})}{B - C}$.
+    \item \textbf{Geometria Analítica rápida:}
+          \begin{itemize}
+              \item Reta por $(x_0, y_0)$ com inclinação $m$: $\displaystyle y - y_0 = m(x - x_0)$, onde $\displaystyle m = \frac{y_2 - y_1}{x_2 - x_1}$.
+              \item Paralelas: $m_1 = m_2$. Perpendiculares: $m_1 \cdot m_2 = -1 \iff m_2 = -1/m_1$.
+              \item Reta horizontal: $y = c$ ($m=0$). Reta vertical: $x = c$ ($m$ indefinido).
+              \item Circunferência de centro $(h,k)$ e raio $r$: $(x-h)^2 + (y-k)^2 = r^2$. Semicírculo superior: $y = k + \sqrt{r^2 - (x-h)^2}$.
+          \end{itemize}
+\end{itemize}
+
+\begin{dica}[Separar fração: o truque mais útil para integrais!]
+    Sempre que o \textbf{denominador for um único termo (monômio)}, separe a fração termo a termo antes de integrar:
+    \[
+        \frac{a + b}{c} = \frac{a}{c} + \frac{b}{c}, \qquad \text{ex.: } \frac{x^m + k}{x^p} = x^{m-p} + k\,x^{-p}.
+    \]
+    Com exponenciais vale a mesma lógica: $\displaystyle \frac{a + e^{kx}}{e^{mx}} = a\,e^{-mx} + e^{(k-m)x}$.
+\end{dica}
+
+\begin{cuidado}[Erros algébricos proibidos!]
+    \begin{itemize}
+        \item $\displaystyle \frac{a}{b + c} \neq \frac{a}{b} + \frac{a}{c}$ \quad (NUNCA separe o denominador!)
+        \item $(a + b)^2 \neq a^2 + b^2$ \quad (falta o $+2ab$!) \qquad $\bullet\;\; \sqrt{a^2 + b^2} \neq a + b$ \quad (não distribua raiz na soma!)
+        \item $\ln(a + b) \neq \ln a + \ln b$
+        \item $e^{a + b} = e^a \cdot e^b$ \quad (NÃO é $e^a + e^b$!) \qquad $\bullet\;\; \displaystyle \frac{e^a}{e^b} = e^{a - b}$ \quad (NÃO é $e^{a/b}$!)
+        \item $\displaystyle \frac{1}{e^x} = e^{-x}$ \quad (NÃO é $-e^x$!) \qquad $\bullet\;\; (e^x)^k = e^{kx}$ \quad (multiplica os expoentes!)
+    \end{itemize}
+\end{cuidado}
+
+% ==============================================================================
+% 2. EXPONENCIAIS E LOGARITMOS
+% ==============================================================================
+\section{Exponenciais e Logaritmos (Lista p.\ 462)}
+
+\begin{defi}[Funções $\ln x$, $e^x$ e exponencial geral $a^x$]
+    \begin{itemize}
+        \item \textbf{Logaritmo natural ($\ln x = \log_e x$):} definido por $\displaystyle \ln x = \int_{1}^{x} \frac{1}{t}\,dt$ para $x > 0$.
+              Domínio: $(0, +\infty)$. Imagem: $(-\infty, +\infty)$.
+        \item \textbf{Função exponencial natural ($e^x$):} é a função inversa de $\ln x$, isto é, $y = e^x \iff x = \ln y$ ($y > 0$).
+              Domínio: $(-\infty, +\infty)$. Imagem: $(0, +\infty)$.
+        \item \textbf{Exponencial e logaritmo em base qualquer ($a > 0, \, a \neq 1$):}
+              \[
+                  a^x = e^{x \ln a}, \qquad \log_a x = \frac{\ln x}{\ln a}.
+              \]
+        \item \textbf{Definição do número $e$ por limite:}
+              \[
+                  e = \lim_{z \to +\infty} \left(1 + \frac{1}{z}\right)^z = \lim_{z \to -\infty} \left(1 + \frac{1}{z}\right)^z = \lim_{h \to 0} (1 + h)^{1/h} \approx 2{,}71828.
+              \]
+    \end{itemize}
+\end{defi}
+
+\begin{teo}[Propriedades essenciais de exponenciais e logaritmos]
+    \textbf{Identidades de cancelamento:}
+    \begin{itemize}
+        \item $\ln 1 = 0, \qquad \ln e = 1, \qquad e^0 = 1, \qquad e^1 = e$
+        \item $\ln(e^x) = x$ ($\forall x \in \mathbb{R}$), \qquad $e^{\ln x} = x$ ($\forall x > 0$), \qquad $\ln(e^k) = k$ \quad (muito cobrado nos limites!)
+    \end{itemize}
+    \textbf{Regras de logaritmo ($a,b > 0$):}
+    \begin{itemize}
+        \item $\ln(ab) = \ln a + \ln b$, \qquad $\displaystyle \ln\!\left(\frac{a}{b}\right) = \ln a - \ln b$, \qquad $\ln(a^r) = r \ln a$ \quad (o expoente "cai" multiplicando)
+    \end{itemize}
+    \textbf{Comportamento e limites:}
+    \begin{itemize}
+        \item $e^x > 0$ sempre! A equação $e^x = 0$ ou $e^x < 0$ não tem solução real.
+        \item $e^x$ é estritamente crescente e côncava para cima em $\mathbb{R}$.
+        \item $\displaystyle \lim_{x \to +\infty} e^x = +\infty, \qquad \lim_{x \to -\infty} e^x = 0^+$ (assíntota horiz.\ $y=0$).
+        \item $\displaystyle \lim_{x \to +\infty} e^{-x} = 0^+, \qquad \lim_{x \to -\infty} e^{-x} = +\infty$.
+        \item $\ln x$ é estritamente crescente e côncava para baixo em $(0,+\infty)$.
+        \item $\displaystyle \lim_{x \to 0^+} \ln x = -\infty$ (assíntota vert.\ $x=0$), \quad $\displaystyle \lim_{x \to +\infty} \ln x = +\infty$.
+    \end{itemize}
+\end{teo}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=9cm, height=5.5cm,
+    axis lines=middle,
+    xmin=-2.5, xmax=3.5,
+    ymin=-2.2, ymax=4.2,
+    xtick=\empty, ytick=\empty,
+    xlabel={$x$}, ylabel={$y$},
+    every axis x label/.style={at={(ticklabel* cs:1.0)}, anchor=west},
+    every axis y label/.style={at={(ticklabel* cs:1.0)}, anchor=south},
+    samples=120
+]
+    \addplot[blue!75!black, thick, domain=-2.5:1.42] {exp(x)} node[pos=0.92, right] {$y=e^x$};
+    \addplot[red!75!black, thick, dashed, domain=-1.42:3.3] {exp(-x)} node[pos=0.14, left] {$y=e^{-x}$};
+    \addplot[green!55!black, thick, domain=0.12:3.4] {ln(x)} node[pos=0.88, above left] {$y=\ln x$};
+    \addplot[gray, dotted, domain=-2:3.2] {x};
+    \filldraw[black] (0,1) circle (1.5pt) node[above left] {$(0,1)$};
+    \filldraw[black] (1,0) circle (1.5pt) node[below right] {$(1,0)$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Funções Hiperbólicas (Resumo)}
+\[
+    \senh x = \frac{e^x - e^{-x}}{2}, \qquad
+    \cosh x = \frac{e^x + e^{-x}}{2}, \qquad
+    \tgh x = \frac{\senh x}{\cosh x} = \frac{e^x - e^{-x}}{e^x + e^{-x}}.
+\]
+Identidade fundamental: $\cosh^2 x - \senh^2 x = 1$. \quad
+Derivadas: $(\senh u)' = \cosh u \cdot u'$, \quad $(\cosh u)' = \senh u \cdot u'$, \quad $(\tgh u)' = \operatorname{sech}^2 u \cdot u'$.
+
+% ==============================================================================
+% 3. DERIVADAS: TUDO
+% ==============================================================================
+\section{Derivadas: Tudo (Revisão Completa + Exponenciais)}
+
+\subsection{Definição, Interpretação e Retas}
+\begin{defi}[Derivada por limite e interpretação geométrica]
+    \[
+        f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h} \qquad \text{ou no ponto } x_0: \quad f'(x_0) = \lim_{x \to x_0} \frac{f(x) - f(x_0)}{x - x_0}.
+    \]
+    \textbf{Notações:} $f'(x) = y' = \frac{dy}{dx} = \frac{d}{dx}[f(x)] = D_x f(x)$. \quad
+    \textbf{Significado:} $f'(x_0)$ é a inclinação da reta tangente em $(x_0, f(x_0))$ e a taxa instantânea de variação de $f$.
+    \begin{itemize}
+        \item \textbf{Reta tangente} em $(x_0, f(x_0))$: $\displaystyle y - f(x_0) = f'(x_0)(x - x_0)$.
+        \item \textbf{Reta normal} em $(x_0, f(x_0))$ ($f'(x_0) \neq 0$): $\displaystyle y - f(x_0) = -\frac{1}{f'(x_0)}(x - x_0)$.
+        \item \textbf{Teorema:} Se $f$ é derivável em $x_0$, então $f$ é contínua em $x_0$. (A recíproca é FALSA: $|x|$ é contínua em $0$, mas não derivável).
+    \end{itemize}
+\end{defi}
+
+\subsection{Regras Gerais de Derivação}
+\begin{tabular}{>{$\displaystyle}l<{$} @{\qquad} >{$\displaystyle}l<{$}}
+\toprule
+\text{Regra} & \text{Fórmula} \\
+\midrule
+\text{Constante} & (c)' = 0 \\
+\text{Constante } \cdot \text{ função} & (c \cdot u)' = c \cdot u' \\
+\text{Soma / Subtração} & (u \pm v)' = u' \pm v' \\
+\text{Produto} & (u \cdot v)' = u'v + uv' \\
+\text{Produto triplo} & (u \cdot v \cdot w)' = u'vw + uv'w + uvw' \\
+\text{Quociente} & \left(\frac{u}{v}\right)' = \frac{u'v - uv'}{v^2} \qquad (v \neq 0) \\
+\text{Regra da Cadeia} & \big[f(g(x))\big]' = f'\big(g(x)\big) \cdot g'(x), \quad \text{ou } \frac{dy}{dx} = \frac{dy}{du} \cdot \frac{du}{dx} \\
+\bottomrule
+\end{tabular}
+
+\subsection{Tabela Completa de Derivadas na Forma da Cadeia ($u = u(x)$)}
+\begin{tabular}{>{$\displaystyle}l<{$} @{\qquad} >{$\displaystyle}l<{$}}
+\toprule
+\text{Função} & \text{Derivada} \\
+\midrule
+u^n \quad (n \in \mathbb{R}) & n\, u^{n-1} \cdot u' \\
+\sqrt{u} & \frac{u'}{2\sqrt{u}} \\
+\frac{1}{u} & -\frac{u'}{u^2} \\
+e^u & e^u \cdot u' \\
+a^u \quad (a > 0, \, a \neq 1) & a^u \ln a \cdot u' \\
+\ln |u| \quad (u \neq 0) & \frac{u'}{u} \\
+\log_a |u| & \frac{u'}{u \ln a} \\
+u^v \quad (u > 0, \text{ derivação logarítmica}) & u^v \left(v' \ln u + v\,\frac{u'}{u}\right) \quad \text{(aplique } \ln \text{ dos dois lados)} \\
+\bottomrule
+\end{tabular}
+
+\vspace{4pt}
+
+\begin{tabular}{>{$\displaystyle}l<{$} @{\qquad} >{$\displaystyle}l<{$}}
+\toprule
+\text{Função} & \text{Derivada} \\
+\midrule
+\sen u & \cos u \cdot u' \\
+\cos u & -\sen u \cdot u' \\
+\tg u & \sec^2 u \cdot u' \\
+\cotg u & -\cosec^2 u \cdot u' \\
+\sec u & \sec u \tg u \cdot u' \\
+\cosec u & -\cosec u \cotg u \cdot u' \\
+\arcsen u & \frac{u'}{\sqrt{1 - u^2}} \\
+\arccos u & -\frac{u'}{\sqrt{1 - u^2}} \\
+\arctg u & \frac{u'}{1 + u^2} \\
+\arccotg u & -\frac{u'}{1 + u^2} \\
+\arcsec u & \frac{u'}{|u|\sqrt{u^2 - 1}} \\
+\arccosec u & -\frac{u'}{|u|\sqrt{u^2 - 1}} \\
+\bottomrule
+\end{tabular}
+
+\begin{dica}[Macete para derivar exponenciais (Lista p.\ 462)]
+    \begin{itemize}
+        \item \textbf{Regra de ouro para $e^u$:} \emph{Copie a exponencial inteira e multiplique pela derivada do expoente!}
+              Ex.: $(e^{kx})' = k e^{kx}$; \quad $(e^{-kx^2})' = -2kx \, e^{-kx^2}$; \quad $(e^{e^x})' = e^{e^x} \cdot e^x$.
+        \item \textbf{Cuidado com $e^{-x}$:} $(e^{-x})' = -e^{-x}$ (o sinal negativo vem da derivada de $-x$).
+        \item \textbf{Simplifique antes quando der:} $e^{k \ln x} = (e^{\ln x})^k = x^k$ (para $x > 0$); \quad $\ln(A/B) = \ln A - \ln B$ torna a derivada de quociente dentro de $\ln$ muito mais fácil!
+        \item \textbf{Quociente com $e^x$ e $e^{-x}$:} em $\displaystyle y = \frac{e^x - e^{-x}}{e^x + e^{-x}}$, use a regra do quociente lembrando que $(e^x - e^{-x})' = e^x + e^{-x}$ e $(e^x + e^{-x})' = e^x - e^{-x}$.
+    \end{itemize}
+\end{dica}
+
+\subsection{Derivação Implícita, Ordem Superior, Diferencial e Taxas}
+\begin{itemize}
+    \item \textbf{Derivação implícita (quando $y$ não está isolado):}
+          1) Derive ambos os lados em relação a $x$ (tratando $y$ como função de $x$: sempre que derivar um termo com $y$, aplique a cadeia e multiplique por $y' = \frac{dy}{dx}$);
+          2) Passe todos os termos com $y'$ para um lado e o restante para o outro;
+          3) Coloque $y'$ em evidência e isole $y'$.
+    \item \textbf{Derivadas de ordem superior:}
+          $f''(x) = \frac{d^2y}{dx^2} = (f'(x))'$; \quad $f'''(x) = \frac{d^3y}{dx^3}$; \quad $f^{(n)}(x) = \frac{d^ny}{dx^n}$.
+    \item \textbf{Diferencial e aproximação linear:}
+          Se $y = f(x)$ é derivável, o diferencial de $y$ é $\displaystyle dy = f'(x)\,dx$.
+          Para um acréscimo pequeno $\Delta x = dx$, vale a aproximação:
+          \[
+              \Delta y = f(x + \Delta x) - f(x) \approx dy = f'(x)\,\Delta x, \qquad f(x + \Delta x) \approx f(x) + f'(x)\,\Delta x.
+          \]
+    \item \textbf{Movimento retilíneo e taxa de variação:}
+          Posição $s(t)$ (ou $x(t)$) $\xrightarrow{\text{deriva}}$ velocidade $\displaystyle v(t) = \frac{ds}{dt}$ $\xrightarrow{\text{deriva}}$ aceleração $\displaystyle a(t) = \frac{dv}{dt} = \frac{d^2s}{dt^2}$.
+          (No sentido contrário, integrar recupera $v(t)$ a partir de $a(t)$ e $s(t)$ a partir de $v(t)$).
+\end{itemize}
+
+\subsection{Análise de Gráficos e Teoremas de Derivadas}
+\begin{teo}[Teoremas do Valor Extremo, de Rolle e do Valor Médio (TVM)]
+    \begin{itemize}
+        \item \textbf{Teorema do Valor Extremo:} Se $f$ é contínua em $[a,b]$, então $f$ atinge máximo absoluto e mínimo absoluto em $[a,b]$ (nos pontos críticos internos ou nos extremos $a$ e $b$).
+        \item \textbf{Teorema de Rolle:} Se $f$ é contínua em $[a,b]$, derivável em $(a,b)$ e $f(a)=f(b)$, então existe $c \in (a,b)$ tal que $f'(c)=0$.
+        \item \textbf{Teorema do Valor Médio (TVM):} Se $f$ é contínua em $[a,b]$ e derivável em $(a,b)$, então existe $c \in (a,b)$ tal que:
+              \[
+                  f'(c) = \frac{f(b) - f(a)}{b - a} \qquad (\text{tangente paralela à secante}).
+              \]
+        \item \textbf{Regra de L'Hôpital (Bônus para limites):} Se $\lim \frac{f(x)}{g(x)}$ resulta em indeterminação $\frac{0}{0}$ ou $\frac{\infty}{\infty}$ e o limite $\lim \frac{f'(x)}{g'(x)}$ existe (finito ou $\pm\infty$), então $\displaystyle \lim \frac{f(x)}{g(x)} = \lim \frac{f'(x)}{g'(x)}$.
+    \end{itemize}
+\end{teo}
+
+\begin{itemize}
+    \item \textbf{Pontos críticos:} $c$ no domínio de $f$ tal que $f'(c) = 0$ ou $f'(c)$ não existe.
+    \item \textbf{Crescimento e decrescimento:} $f'(x) > 0$ no intervalo $\implies f$ crescente; \quad $f'(x) < 0 \implies f$ decrescente.
+    \item \textbf{Teste da 1ª Derivada (em torno de $c$ crítico):}
+          $f'$ muda de $+$ para $- \implies$ máximo relativo; \quad
+          $f'$ muda de $-$ para $+ \implies$ mínimo relativo; \quad
+          não muda de sinal $\implies$ não é extremo.
+    \item \textbf{Concavidade e Ponto de Inflexão:}
+          $f''(x) > 0 \implies$ côncava para cima ($\cup$); \quad $f''(x) < 0 \implies$ côncava para baixo ($\cap$).
+          \textbf{Ponto de inflexão:} ponto onde o gráfico muda de concavidade (candidatos: $f''(x)=0$ ou $f''$ inexistente).
+    \item \textbf{Teste da 2ª Derivada (quando $f'(c) = 0$):}
+          $f''(c) < 0 \implies$ máximo relativo; \quad $f''(c) > 0 \implies$ mínimo relativo; \quad $f''(c)=0 \implies$ inconclusivo (use a 1ª derivada).
+    \item \textbf{Roteiro de esboço de gráfico:}
+          1) Domínio e simetrias (par/ímpar); 2) Interceptos ($x=0$ e $y=0$); 3) Assíntotas verticais e horizontais; 4) $f'$ (pontos críticos e crescimento); 5) $f''$ (concavidade e inflexão); 6) Tabela de sinais e desenho.
+\end{itemize}
+
+% ==============================================================================
+% 4. INTEGRAL INDEFINIDA (ANTIDERIVADA)
+% ==============================================================================
+\section{Integral Indefinida / Antiderivada (Lista p.\ 294)}
+
+\begin{defi}[Antiderivada e Integral Indefinida]
+    A integração é a operação inversa da derivação:
+    \[
+        \int f(x)\,dx = F(x) + C \iff F'(x) = f(x), \qquad C \in \mathbb{R} \text{ (constante de integração)}.
+    \]
+    \textbf{Por que existe o $+C$?} Porque a derivada de qualquer constante é $0$. Logo, toda família de funções que difere por uma constante tem a mesma derivada.
+\end{defi}
+
+\begin{teo}[Propriedades básicas (F1 a F4 do caderno)]
+    \begin{itemize}
+        \item \textbf{F1 (Regra da potência):} $\displaystyle \int x^n \, dx = \frac{x^{n+1}}{n+1} + C \qquad (n \in \mathbb{Q}, \; n \neq -1)$.
+        \item \textbf{F2 (Soma e subtração):} $\displaystyle \int \big[u(x) \pm v(x)\big]\,dx = \int u(x)\,dx \pm \int v(x)\,dx$.
+        \item \textbf{F3 (Constante multiplicando):} $\displaystyle \int k \cdot f(x)\,dx = k \int f(x)\,dx \qquad (k \in \mathbb{R})$.
+        \item \textbf{F4 (Integral da constante):} $\displaystyle \int k \, dx = kx + C \qquad (k \in \mathbb{R})$.
+    \end{itemize}
+\end{teo}
+
+\subsection{Tabela Completa de Integrais Imediatas (na forma em $u$)}
+\begin{multicols}{2}
+\begin{tabular}{>{$\displaystyle}l<{$}}
+\toprule
+\text{Potências, Exponenciais e Logaritmo} \\
+\midrule
+\int du = u + C \\
+\int u^n \, du = \frac{u^{n+1}}{n+1} + C \qquad (n \neq -1) \\
+\int \frac{1}{u}\,du = \int u^{-1}\,du = \ln|u| + C \\
+\int e^u \, du = e^u + C \\
+\int a^u \, du = \frac{a^u}{\ln a} + C \qquad (a > 0, \, a \neq 1) \\
+\int \ln u \, du = u \ln u - u + C \quad \text{(por partes)} \\
+\bottomrule
+\end{tabular}
+
+\columnbreak
+
+\begin{tabular}{>{$\displaystyle}l<{$}}
+\toprule
+\text{Trigonométricas e Inversas} \\
+\midrule
+\int \sen u \, du = -\cos u + C \\
+\int \cos u \, du = \sen u + C \\
+\int \sec^2 u \, du = \tg u + C \\
+\int \cosec^2 u \, du = -\cotg u + C \\
+\int \sec u \tg u \, du = \sec u + C \\
+\int \cosec u \cotg u \, du = -\cosec u + C \\
+\bottomrule
+\end{tabular}
+\end{multicols}
+
+\vspace{4pt}
+\begin{tabular}{>{$\displaystyle}l<{$} @{\qquad} >{$\displaystyle}l<{$}}
+\toprule
+\text{Trigonométricas (substituição)} & \text{Frações com quadrados (inversas trigonométricas)} \\
+\midrule
+\int \tg u \, du = -\ln|\cos u| + C = \ln|\sec u| + C & \int \frac{du}{\sqrt{a^2 - u^2}} = \arcsen\!\left(\frac{u}{a}\right) + C \quad (a>0) \\
+\int \cotg u \, du = \ln|\sen u| + C & \int \frac{du}{a^2 + u^2} = \frac{1}{a}\arctg\!\left(\frac{u}{a}\right) + C \quad (a>0) \\
+\int \sec u \, du = \ln|\sec u + \tg u| + C & \int \frac{du}{u\sqrt{u^2 - a^2}} = \frac{1}{a}\arcsec\!\left(\frac{|u|}{a}\right) + C \quad (a>0) \\
+\int \cosec u \, du = \ln|\cosec u - \cotg u| + C & \int \frac{du}{u^2 - a^2} = \frac{1}{2a}\ln\left|\frac{u-a}{u+a}\right| + C \quad (a>0) \\
+\bottomrule
+\end{tabular}
+
+\begin{dica}[Atalhos que economizam tempo e evitam erros]
+    \begin{itemize}
+        \item \textbf{"Regra do $a$" (argumento linear $ax + b$, com $a \neq 0$):} se $\int f(u)\,du = F(u)+C$, então:
+              \[
+                  \int f(ax+b)\,dx = \frac{1}{a} F(ax+b) + C.
+              \]
+              Exemplos genéricos: $\displaystyle \int e^{kx}\,dx = \frac{1}{k}e^{kx} + C$, \quad $\displaystyle \int \sen(kx)\,dx = -\frac{1}{k}\cos(kx) + C$, \quad $\displaystyle \int (ax+b)^n\,dx = \frac{(ax+b)^{n+1}}{a(n+1)} + C$.
+        \item \textbf{Atalho do expoente fracionário:} para evitar fração de fração, some $1$ no expoente e \textbf{multiplique pelo inverso do novo expoente}:
+              \[
+                  \int x^{p/q}\,dx = \frac{q}{p+q}\,x^{(p+q)/q} + C \qquad (p+q \neq 0).
+              \]
+        \item \textbf{Reescreva ANTES de integrar:}
+              1) Raiz vira potência ($\sqrt[n]{x^m} \to x^{m/n}$); \quad
+              2) Potência no denominador sobe negativa ($k/x^n \to k x^{-n}$); \quad
+              3) Distribua produtos ($x^m(ax^n + b)$) e expanda quadrados ($(a+b)^2$); \quad
+              4) Fração com monômio embaixo: divida termo a termo!
+        \item \textbf{Prova real infalível:} terminou a integral? \textbf{Derive sua resposta!} Tem que dar exatamente o integrando original.
+    \end{itemize}
+\end{dica}
+
+\subsection{Identidades Trigonométricas Úteis e Ângulos Notáveis}
+\begin{multicols}{2}
+\begin{itemize}
+    \item Pitagóricas: $\sen^2 x + \cos^2 x = 1$; \quad $\tg^2 x + 1 = \sec^2 x$; \quad $1 + \cotg^2 x = \cosec^2 x$.
+    \item Para integrar $\tg^2 x$ ou $\cotg^2 x$: troque $\tg^2 x = \sec^2 x - 1$ e $\cotg^2 x = \cosec^2 x - 1$.
+    \item Redução de grau (arco duplo):
+          $\displaystyle \sen^2 x = \frac{1 - \cos(2x)}{2}, \qquad \cos^2 x = \frac{1 + \cos(2x)}{2}$.
+\end{itemize}
+\columnbreak
+\begin{itemize}
+    \item $\sen(2x) = 2\sen x \cos x$; \quad $\cos(2x) = \cos^2 x - \sen^2 x$.
+    \item Razões básicas: $\tg x = \frac{\sen x}{\cos x}$, $\cotg x = \frac{\cos x}{\sen x}$, $\sec x = \frac{1}{\cos x}$, $\cosec x = \frac{1}{\sen x}$.
+    \item Padrões de prova: $\displaystyle \frac{\sen x}{\cos^2 x} = \sec x \tg x$, \qquad $\displaystyle \frac{\cos x}{\sen^2 x} = \cosec x \cotg x$.
+\end{itemize}
+\end{multicols}
+
+\begin{center}
+\textbf{Tabela de Valores Trigonométricos (USE SEMPRE RADIANOS!)} \\[3pt]
+{\small
+\begin{tabular}{c|cccccccc}
+\toprule
+$\theta$ & $0$ & $\pi/6$ & $\pi/4$ & $\pi/3$ & $\pi/2$ & $\pi$ & $3\pi/2$ & $2\pi$ \\
+\midrule
+$\sen \theta$ & $0$ & $1/2$ & $\sqrt{2}/2$ & $\sqrt{3}/2$ & $1$ & $0$ & $-1$ & $0$ \\
+$\cos \theta$ & $1$ & $\sqrt{3}/2$ & $\sqrt{2}/2$ & $1/2$ & $0$ & $-1$ & $0$ & $1$ \\
+$\tg \theta$  & $0$ & $\sqrt{3}/3$ & $1$ & $\sqrt{3}$ & $\nexists$ & $0$ & $\nexists$ & $0$ \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+\subsection{Aplicações da Antiderivada (Equações Diferenciais Simples e Queda Livre)}
+\begin{itemize}
+    \item \textbf{Achar a curva $y = f(x)$ dada a inclinação $y' = g(x)$ e um ponto $(x_0, y_0)$:}
+          Integre $y = \int g(x)\,dx = G(x) + C$; substitua $x = x_0$ e $y = y_0$ para achar $C$.
+    \item \textbf{Dada a 2ª derivada $y'' = h(x)$:}
+          Integre uma vez para achar $y' = H(x) + C_1$; integre de novo para achar $y = \tilde{H}(x) + C_1 x + C_2$. Use duas condições dadas para determinar $C_1$ e $C_2$.
+    \item \textbf{Economia (custo marginal):} $C(x) = \int C'(x)\,dx$, usando o custo fixo $C(0)$ ou um ponto conhecido para achar a constante.
+    \item \textbf{Queda Livre / Movimento Vertical (caderno):}
+          Com aceleração da gravidade constante ($a(t) = -g$ se eixo para cima, ou $a(t) = g$ se eixo para baixo), velocidade inicial $v(0) = v_0$ e posição inicial $x(0) = x_0$:
+          \[
+              v(t) = \int a\,dt = -gt + v_0, \qquad
+              x(t) = \int v(t)\,dt = -\frac{1}{2}gt^2 + v_0 t + x_0.
+          \]
+          \textbf{Altura máxima:} ocorre quando $v(t_p) = 0 \implies \displaystyle t_p = \frac{v_0}{g}$, com altura máxima $x(t_p) = -\frac{1}{2}g t_p^2 + v_0 t_p + x_0$. \quad
+          \textbf{Tempo até tocar o chão ($t_c$):} resolva $x(t_c) = 0$ por Bhaskara e pegue $t_c > 0$.
+\end{itemize}
+
+% ==============================================================================
+% 5. SUBSTITUICAO (REGRA DA CADEIA PARA INTEGRAIS)
+% ==============================================================================
+\section{Integração por Substituição / Regra da Cadeia (Lista p.\ 302)}
+
+\begin{teo}[Regra da Substituição ($u$-substituição)]
+    Se $u = g(x)$ é derivável com $du = g'(x)\,dx$ e $F' = f$, então:
+    \[
+        \int f\big(g(x)\big)\,g'(x)\,dx = \int f(u)\,du = F(u) + C = F\big(g(x)\big) + C.
+    \]
+\end{teo}
+
+\begin{dica}[Passo a passo infalível da Substituição]
+    \begin{enumerate}
+        \item \textbf{Escolha $u$ = "o recheio" (a função de dentro):} dentro da raiz, da potência, do expoente de $e$, do argumento de $\sen$/$\cos$/$\sec^2$, ou o denominador inteiro. \emph{Dica:} procure uma expressão cuja derivada já esteja (a menos de constante) multiplicando o integrando!
+        \item \textbf{Derive $u$ para achar $du$:} escreva $\displaystyle du = u'\,dx$.
+        \item \textbf{Isole $dx$:} $\displaystyle dx = \frac{du}{u'}$.
+        \item \textbf{Substitua $u$ e $dx$ na integral e simplifique:} \textbf{todo $x$ tem que sumir!} Se sobrar constante multiplicando, tire para fora da integral. Se sobrar $x$, tente o passo "caso sobrou $x$" abaixo; se não der, escolha outro $u$ ou outra técnica.
+        \item \textbf{Integre em relação a $u$.}
+        \item \textbf{Volte para a variável original ($x$)} substituindo $u$ pela expressão original (e não esqueça o $+C$!).
+    \end{enumerate}
+    \textbf{Caso "sobrou $x$" (ex.: $\int x\sqrt{x+a}\,dx$):} faça $u = x+a \implies du = dx$, e isole $x = u - a$. Substituindo: $\int (u-a)u^{1/2}\,du = \int (u^{3/2} - a u^{1/2})\,du$, que sai direto pela potência!
+\end{dica}
+
+\begin{tabular}{>{$\displaystyle}l<{$} @{\qquad} >{$\displaystyle}l<{$} @{\qquad} >{$\displaystyle}l<{$}}
+\toprule
+\text{Padrão reconhecível} & \text{Substituição} & \text{Resultado imediato} \\
+\midrule
+\int u^n \, u' \, dx \quad (n \neq -1) & u = u(x) & \frac{u^{n+1}}{n+1} + C \\
+\int \frac{u'}{u}\,dx & u = u(x) & \ln|u| + C \\
+\int e^u \, u' \, dx & u = u(x) & e^u + C \\
+\int \sen(u)\,u'\,dx & u = u(x) & -\cos(u) + C \\
+\int x^{n-1}(a + b x^n)^p \, dx & u = a + b x^n & \frac{1}{bn} \int u^p \, du \\
+\int \frac{f'(x)}{\sqrt{f(x)}}\,dx & u = f(x) & 2\sqrt{f(x)} + C \\
+\bottomrule
+\end{tabular}
+
+\begin{cuidado}[Armadilhas na substituição]
+    \begin{itemize}
+        \item \textbf{Constante pode ajustar; variável NÃO!} Falta um fator $k$ para completar $du$? Multiplique e divida por $k$. Falta um $x$? Não pode inventar $x$ fora da integral! Ex.: $\int e^{x^2}\,dx$ não tem primitiva elementar, mas $\int x e^{x^2}\,dx$ sai na hora com $u = x^2$.
+        \item \textbf{Truque para $\displaystyle \int \frac{dx}{1 + e^x}$ (Lista p.\ 462, Ex.\ 28):} multiplicar $u=e^x$ dá $\int \frac{du}{u(1+u)}$. Mais rápido: multiplique em cima e embaixo por $e^{-x}$, obtendo $\displaystyle \int \frac{e^{-x}}{e^{-x} + 1}\,dx$, e faça $u = e^{-x} + 1 \implies -\ln(1 + e^{-x}) + C$.
+    \end{itemize}
+\end{cuidado}
+
+% ==============================================================================
+% 6. INTEGRAL DEFINIDA
+% ==============================================================================
+\section{Integral Definida e Teorema Fundamental do Cálculo (Lista p.\ 351)}
+
+\begin{defi}[Soma de Riemann e Integral Definida]
+    Dividindo $[a,b]$ em $n$ subintervalos de largura $\Delta_i x$ com pontos amostrais $\xi_i$ e norma $\|\Delta\| = \max \Delta_i x$:
+    \[
+        \int_{a}^{b} f(x)\,dx = \lim_{\|\Delta\| \to 0} \sum_{i=1}^{n} f(\xi_i)\,\Delta_i x.
+    \]
+    Com partição uniforme: $\displaystyle \Delta x = \frac{b-a}{n}$ e $x_i = a + i\,\Delta x$, logo $\displaystyle \int_{a}^{b} f(x)\,dx = \lim_{n \to \infty} \sum_{i=1}^{n} f(x_i)\,\Delta x$.
+\end{defi}
+
+\begin{teo}[Propriedades da Integral Definida]
+    \begin{itemize}
+        \item Limites iguais: $\displaystyle \int_{a}^{a} f(x)\,dx = 0$. \qquad Inversão de limites: $\displaystyle \int_{a}^{b} f(x)\,dx = -\int_{b}^{a} f(x)\,dx$.
+        \item Linearidade: $\displaystyle \int_{a}^{b} [\alpha f(x) \pm \beta g(x)]\,dx = \alpha \int_{a}^{b} f(x)\,dx \pm \beta \int_{a}^{b} g(x)\,dx$.
+        \item Aditividade no intervalo: $\displaystyle \int_{a}^{b} f(x)\,dx = \int_{a}^{c} f(x)\,dx + \int_{c}^{b} f(x)\,dx$.
+        \item Comparação: se $f(x) \ge g(x)$ em $[a,b]$ ($a<b$), então $\displaystyle \int_{a}^{b} f(x)\,dx \ge \int_{a}^{b} g(x)\,dx$.
+        \item Cota (limitação): se $m \le f(x) \le M$ em $[a,b]$, então $\displaystyle m(b-a) \le \int_{a}^{b} f(x)\,dx \le M(b-a)$.
+        \item Simetria em $[-a,a]$: se $f$ é \textbf{ímpar} ($f(-x)=-f(x)$), $\displaystyle \int_{-a}^{a} f(x)\,dx = 0$; \quad se $f$ é \textbf{par} ($f(-x)=f(x)$), $\displaystyle \int_{-a}^{a} f(x)\,dx = 2\int_{0}^{a} f(x)\,dx$.
+    \end{itemize}
+\end{teo}
+
+\begin{teo}[Teorema Fundamental do Cálculo (TFC) e Valor Médio]
+    \textbf{TFC -- Parte 1 (Derivada de uma integral):} Se $f$ é contínua em $[a,b]$, então $\displaystyle G(x) = \int_{a}^{x} f(t)\,dt$ é derivável e:
+    \[
+        \frac{d}{dx}\int_{a}^{x} f(t)\,dt = f(x).
+    \]
+    \textbf{Com limites variáveis (regra da cadeia):}
+    \[
+        \frac{d}{dx}\int_{a}^{g(x)} f(t)\,dt = f\big(g(x)\big)\cdot g'(x), \qquad
+        \frac{d}{dx}\int_{h(x)}^{g(x)} f(t)\,dt = f\big(g(x)\big)\cdot g'(x) - f\big(h(x)\big)\cdot h'(x).
+    \]
+    \textbf{TFC -- Parte 2 (Avaliação da integral definida):} Se $F$ é qualquer antiderivada de $f$ ($F' = f$) em $[a,b]$:
+    \[
+        \int_{a}^{b} f(x)\,dx = \Big[ F(x) \Big]_{a}^{b} = F(b) - F(a).
+    \]
+    \textbf{Nota:} O $+C$ se cancela sempre: $\big(F(b)+C\big) - \big(F(a)+C\big) = F(b) - F(a)$.\\[3pt]
+    \textbf{Valor Médio e TVM para integrais:} Se $f$ é contínua em $[a,b]$, o \textbf{valor médio} de $f$ é:
+    \[
+        f_{\text{médio}} = \frac{1}{b - a}\int_{a}^{b} f(x)\,dx, \qquad \text{e existe } c \in [a,b] \text{ tal que } f(c) = f_{\text{médio}}.
+    \]
+\end{teo}
+
+\begin{dica}[Técnicas específicas para integral definida]
+    \begin{itemize}
+        \item \textbf{Substituição na integral definida:} Você tem duas opções válidas (nunca misture!):
+              \begin{enumerate}
+                  \item \emph{Trocar os limites (mais rápido):} calcule $u_a = g(a)$ e $u_b = g(b)$ e avalie diretamente $\int_{u_a}^{u_b} f(u)\,du$ sem voltar para $x$.
+                  \item \emph{Voltar para $x$:} ache a primitiva indefinida em $x$ primeiro e depois aplique os limites originais $[a,b]$.
+              \end{enumerate}
+        \item \textbf{Módulo $|u(x)|$:} ache onde $u(x) = 0$ (seja $c \in (a,b)$) e quebre a integral: $\int_{a}^{b} |u|\,dx = \int_{a}^{c} (-u)\,dx + \int_{c}^{b} u\,dx$ (conforme os sinais em cada trecho).
+        \item \textbf{Grau do numerador $\ge$ grau do denominador:} faça a divisão de polinômios primeiro para cair em termos imediatos + fração própria.
+    \end{itemize}
+\end{dica}
+
+\begin{cuidado}[Integral definida $\neq$ Área!]
+    A integral definida calcula a \textbf{área líquida (com sinal)}: trechos onde $f(x) > 0$ somam positivo e trechos onde $f(x) < 0$ somam negativo. Portanto, uma integral definida \textbf{pode dar negativa ou zero}! Já a \textbf{área geométrica} é sempre $\ge 0$.
+\end{cuidado}
+
+% ==============================================================================
+% 7. AREA DE REGIOES PLANAS
+% ==============================================================================
+\section{Área de Regiões Planas (Lista p.\ 359)}
+
+\begin{teo}[Fórmulas de Área entre Curvas]
+    \textbf{1) Fatias verticais (integração em $dx$):} para $f(x) \ge g(x)$ em $[a,b]$ ("de cima menos a de baixo"):
+    \[
+        A = \lim_{\|\Delta\| \to 0} \sum_{i=1}^{n} \big[f(\xi_i) - g(\xi_i)\big]\,\Delta_i x = \int_{a}^{b} \big[f(x) - g(x)\big]\,dx.
+    \]
+    \textbf{2) Fatias horizontais (integração em $dy$):} para $f(y) \ge g(y)$ em $[c,d]$ ("da direita menos a da esquerda"):
+    \[
+        A = \lim_{\|\Delta\| \to 0} \sum_{i=1}^{n} \big[f(\xi_i) - g(\xi_i)\big]\,\Delta_i y = \int_{c}^{d} \big[f(y) - g(y)\big]\,dy.
+    \]
+    \textbf{Caso particular (região abaixo do eixo $x$):} se $f(x) \le 0$ em $[a,b]$, então $A = \int_{a}^{b} [0 - f(x)]\,dx = -\int_{a}^{b} f(x)\,dx$.
+\end{teo}
+
+\begin{dica}[Roteiro para resolver questões da Lista p.\ 359 (e padrão da prova)]
+    \begin{enumerate}
+        \item \textbf{Esboce a região:} identifique quais são as retas e curvas (use a galeria abaixo).
+        \item \textbf{Ache os pontos de interseção:} iguale as equações das curvas ($f(x) = g(x)$ ou $f(y)=g(y)$) para achar os limites $a, b$ (ou $c, d$).
+        \item \textbf{Escolha $dx$ ou $dy$:} prefira $dx$ (retângulo vertical) se as funções vierem como $y = f(x)$ e a "curva de cima" e a "de baixo" não mudarem. Prefira $dy$ (retângulo horizontal) quando vier $x = f(y)$ ou quando a fatia vertical trocar de fronteira no meio.
+        \item \textbf{Confirme quem está em cima (ou à direita):} teste um ponto qualquer no meio do intervalo!
+        \item \textbf{Se as curvas se cruzarem no meio:} divida a região em duas ou mais integrais, trocando a ordem "de cima $-$ de baixo" onde houver cruzamento.
+    \end{enumerate}
+    \textbf{Modelo de resposta no formato (a)/(b)/(c) pedido pelo Leithold (p.\ 359):}
+    \begin{itemize}
+        \item \textbf{(a)} Desenhe os eixos, as curvas, sombreie a região fechada e desenhe um retângulo fino representativo (largura $\Delta_i x$, altura $f(\xi_i) - g(\xi_i)$).
+        \item \textbf{(b)} Escreva a soma de Riemann: $A = \lim_{\|\Delta\| \to 0} \sum_{i=1}^{n} [f(\xi_i) - g(\xi_i)]\,\Delta_i x$.
+        \item \textbf{(c)} Passe para a integral definida e aplique o TFC: $A = \int_{a}^{b} [f(x) - g(x)]\,dx = \dots$ (em \textbf{u.a.} -- unidades de área).
+    \end{itemize}
+\end{dica}
+
+\subsection{Galeria de Curvas Clássicas para Esboço Rápido (Sem Números nos Eixos)}
+\begin{center}
+% Linha 1: 4 graficos
+\begin{tikzpicture}
+\begin{axis}[width=4.1cm,height=3.3cm,axis lines=middle,xtick=\empty,ytick=\empty,title={\footnotesize Reta $y=ax+b$},title style={yshift=-4pt}]
+    \addplot[blue!75!black,thick,domain=-1.5:2]{0.8*x+0.5};
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[width=4.1cm,height=3.3cm,axis lines=middle,xtick=\empty,ytick=\empty,title={\footnotesize Parábola $a>0$ ($\cup$)},title style={yshift=-4pt}]
+    \addplot[blue!75!black,thick,domain=-1.5:1.5]{x^2};
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[width=4.1cm,height=3.3cm,axis lines=middle,xtick=\empty,ytick=\empty,title={\footnotesize Parábola $a<0$ ($\cap$)},title style={yshift=-4pt}]
+    \addplot[blue!75!black,thick,domain=-1.7:1.7]{2-x^2};
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[width=4.1cm,height=3.3cm,axis lines=middle,xtick=\empty,ytick=\empty,xmin=-0.3,xmax=3.5,ymin=-0.3,ymax=2.2,title={\footnotesize Raiz $y=\sqrt{x}$},title style={yshift=-4pt}]
+    \addplot[blue!75!black,thick,domain=0:3.2,samples=80]{sqrt(x)};
+\end{axis}
+\end{tikzpicture}
+
+\vspace{4pt}
+% Linha 2: 4 graficos
+\begin{tikzpicture}
+\begin{axis}[width=4.1cm,height=3.3cm,axis lines=middle,xtick=\empty,ytick=\empty,title={\footnotesize Cúbica $y=x^3$},title style={yshift=-4pt}]
+    \addplot[blue!75!black,thick,domain=-1.4:1.4,samples=60]{x^3};
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[width=4.1cm,height=3.3cm,axis lines=middle,xtick=\empty,ytick=\empty,xmin=-2,xmax=2,ymin=-0.2,ymax=3.5,title={\footnotesize $y=1/x^2$},title style={yshift=-4pt}]
+    \addplot[blue!75!black,thick,domain=-2:-0.55,samples=50]{1/(x^2)};
+    \addplot[blue!75!black,thick,domain=0.55:2,samples=50]{1/(x^2)};
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[width=4.1cm,height=3.3cm,axis lines=middle,xtick=\empty,ytick=\empty,xmin=-0.4,xmax=2.5,ymin=-1.6,ymax=1.6,title={\footnotesize Deitada $x=y^2$},title style={yshift=-4pt}]
+    \addplot[blue!75!black,thick,domain=-1.5:1.5,samples=60]({x^2},{x});
+\end{axis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{axis}[width=4.1cm,height=3.3cm,axis lines=middle,xtick=\empty,ytick=\empty,xmin=-0.3,xmax=6.5,ymin=-1.3,ymax=1.3,title={\footnotesize $\sen x$ (cheia) / $\cos x$},title style={yshift=-4pt}]
+    \addplot[blue!75!black,thick,domain=0:6.28,samples=80]{sin(deg(x))};
+    \addplot[red!75!black,thick,dashed,domain=0:6.28,samples=80]{cos(deg(x))};
+\end{axis}
+\end{tikzpicture}
+
+\vspace{4pt}
+% Linha 3: modulo + esquema de fatia
+\begin{tikzpicture}
+\begin{axis}[width=4.1cm,height=3.2cm,axis lines=middle,xtick=\empty,ytick=\empty,xmin=-2,xmax=2,ymin=-0.3,ymax=2.2,title={\footnotesize Módulo $y=|x|$},title style={yshift=-4pt}]
+    \addplot[blue!75!black,thick,domain=-1.8:1.8]{abs(x)};
+\end{axis}
+\end{tikzpicture}\hspace{1cm}
+\begin{tikzpicture}
+\begin{axis}[width=6cm,height=3.2cm,axis lines=middle,xtick=\empty,ytick=\empty,xmin=-0.2,xmax=3.2,ymin=-0.35,ymax=2.6,clip=false,title={\footnotesize Elemento retangular: cima $-$ baixo},title style={yshift=-4pt}]
+    \addplot[name path=top,blue!75!black,thick,domain=0.4:2.7]{0.25*x^2+0.8};
+    \addplot[name path=bot,red!75!black,thick,domain=0.4:2.7]{0.15*x+0.2};
+    \addplot[blue!12] fill between[of=top and bot, soft clip={domain=0.6:2.5}];
+    \draw[thick,fill=blue!35,opacity=0.8] (1.45,0.417) rectangle (1.65,1.40);
+    \node[above] at (1.55,1.42) {\tiny $f(\xi_i)$};
+    \node[below] at (1.55,0.40) {\tiny $g(\xi_i)$};
+    \node[below] at (0.6,0) {\tiny $a$};
+    \node[below] at (2.5,0) {\tiny $b$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+% ==============================================================================
+% 8. VOLUMES DE SOLIDOS DE REVOLUCAO
+% ==============================================================================
+\section{Volumes de Sólidos de Revolução (Lista p.\ 382)}
+
+\begin{teo}[Métodos de Volume: Cortes, Discos, Anéis (Arruelas) e Cascas]
+    \begin{itemize}
+        \item \textbf{Método geral das seções transversais (corte):} Se a área da seção perpendicular ao eixo $x$ em cada ponto é $A(x)$, então:
+              \[
+                  V = \lim_{\|\Delta\| \to 0} \sum_{i=1}^{n} A(\xi_i)\,\Delta_i x = \int_{a}^{b} A(x)\,dx.
+              \]
+        \item \textbf{Método do Disco} (região encostada no eixo de rotação; $A = \pi R^2$):
+              \begin{itemize}
+                  \item Em torno do \textbf{eixo $x$} ($y=0$): $\displaystyle V = \lim_{\|\Delta\| \to 0} \sum_{i=1}^{n} \pi \big[f(\xi_i)\big]^2 \Delta_i x = \pi \int_{a}^{b} \big[f(x)\big]^2 \, dx$.
+                  \item Em torno do \textbf{eixo $y$} ($x=0$): $\displaystyle V = \pi \int_{c}^{d} \big[g(y)\big]^2 \, dy$.
+              \end{itemize}
+        \item \textbf{Método do Anel / Arruela} (há um "buraco" entre a região e o eixo; $A = \pi (R^2 - r^2)$):
+              \[
+                  V = \pi \int_{a}^{b} \Big( \big[R(x)\big]^2 - \big[r(x)\big]^2 \Big)\,dx \qquad \text{(ou em } dy \text{ se eixo vertical)},
+              \]
+              onde $R$ é o \textbf{raio externo} (curva mais distante do eixo) e $r$ é o \textbf{raio interno} (curva mais próxima do eixo).
+        \item \textbf{Eixo de rotação deslocado ($y = k$ ou $x = h$):}
+              O raio é sempre a \textbf{distância da curva até o eixo de rotação}!
+              \begin{itemize}
+                  \item Eixo horizontal $y = k$: $\text{raio} = |f(x) - k|$ (integra em $dx$).
+                  \item Eixo vertical $x = h$: $\text{raio} = |g(y) - h|$ (integra em $dy$).
+              \end{itemize}
+        \item \textbf{Bônus -- Método das Cascas Cilíndricas} (fatia \textbf{paralela} ao eixo de rotação):
+              \[
+                  V = 2\pi \int_{a}^{b} (\text{raio}) \cdot (\text{altura}) \, dx \quad (\text{para eixo vertical } x=h: \text{ raio } = |x-h|).
+              \]
+    \end{itemize}
+\end{teo}
+
+\begin{center}
+\textbf{Guia Rápido: Eixo de Rotação $\longrightarrow$ Método $\longrightarrow$ Variável (Discos/Anéis)} \\[3pt]
+\begin{tabular}{llll}
+\toprule
+Eixo de rotação & Posição da fatia & Variável & Fórmula do raio \\
+\midrule
+Eixo $x$ ($y=0$) & Perpendicular ao eixo $x$ & $dx$ & $R = |f(x)|$ \\
+Reta horizontal $y=k$ & Perpendicular a $y=k$ & $dx$ & $R = |f(x) - k|$ \\
+Eixo $y$ ($x=0$) & Perpendicular ao eixo $y$ & $dy$ & $R = |g(y)|$ \\
+Reta vertical $x=h$ & Perpendicular a $x=h$ & $dy$ & $R = |g(y) - h|$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{dica}[Dicas práticas da Lista p.\ 382 e deduções clássicas]
+    \begin{itemize}
+        \item \textbf{Curvas implícitas do tipo $y^m = x^n$ (Ex.\ 5, 6, 8, 9 da p.\ 382):}
+              \begin{itemize}
+                  \item Se for integrar em $dx$, isole $y$: $\displaystyle y = x^{n/m}$, logo $y^2 = x^{2n/m}$.
+                  \item Se for integrar em $dy$, isole $x$: $\displaystyle x = y^{m/n}$, logo $x^2 = y^{2m/n}$.
+              \end{itemize}
+        \item \textbf{Dedução do volume do cone circular reto} (altura $h$, raio da base $a$):
+              Por semelhança de triângulos ou reta de $(0,0)$ a $(h,a)$, o raio na posição $x$ é $\displaystyle r(x) = \frac{a}{h}x$. Girando em torno do eixo $x$ (ou por corte com discos de área $A(x)=\pi r(x)^2$):
+              \[
+                  V = \pi \int_{0}^{h} \left(\frac{a}{h}x\right)^2 dx = \frac{\pi a^2}{h^2} \Big[ \frac{x^3}{3} \Big]_{0}^{h} = \frac{1}{3}\pi a^2 h.
+              \]
+        \item \textbf{Dedução da esfera de raio $r$:} gire o semicírculo $y = \sqrt{r^2 - x^2}$ em $[-r,r]$ ao redor do eixo $x$:
+              \[
+                  V = \pi \int_{-r}^{r} (r^2 - x^2)\,dx = 2\pi \Big[ r^2 x - \frac{x^3}{3} \Big]_{0}^{r} = \frac{4}{3}\pi r^3.
+              \]
+        \item \textbf{Tronco de cone} (raios $a$ e $b$, altura $h$): segmento de reta de $(0,b)$ a $(h,a)$ girando no eixo $x$ dá $\displaystyle V = \frac{1}{3}\pi h (a^2 + ab + b^2)$.
+    \end{itemize}
+\end{dica}
+
+\begin{cuidado}[Erro fatal em Anéis (Arruelas)!]
+    \begin{itemize}
+        \item $\displaystyle R^2 - r^2 \neq (R - r)^2$! \textbf{Eleve cada raio ao quadrado SEPARADAMENTE e depois subtraia.}
+        \item No eixo deslocado $y=k$ (ou $x=h$), primeiro escreva a distância até o eixo ($|f(x)-k|$) e SÓ DEPOIS eleve ao quadrado.
+        \item Não esqueça do $\pi$ na frente da integral e escreva a resposta em \textbf{u.v.} (unidades de volume).
+    \end{itemize}
+\end{cuidado}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+    % Esboço genérico de anel / arruela
+    \draw[->] (-0.4,0) -- (4.5,0) node[right] {$x$};
+    \draw[->] (0,-1.5) -- (0,2.1) node[above] {$y$};
+    \draw[blue!75!black, thick, domain=0.6:3.6, samples=60] plot (\x, {0.25*\x + 0.9}) node[right] {$R(x)$};
+    \draw[red!75!black, thick, domain=0.6:3.6, samples=60] plot (\x, {0.15*\x + 0.3}) node[right] {$r(x)$};
+    \draw[dashed] (0.6,0) -- (0.6,1.05);
+    \draw[dashed] (3.6,0) -- (3.6,1.80);
+    \draw[fill=blue!20, opacity=0.7] (2.1,0) ellipse (0.28 and 1.425);
+    \draw[fill=white] (2.1,0) ellipse (0.14 and 0.615);
+    \draw[<->, thick] (2.1,0) -- (2.1,0.615) node[midway, left] {\tiny $r$};
+    \draw[<->, thick] (2.22,0) -- (2.22,1.425) node[midway, right] {\tiny $R$};
+    \node[below] at (0.6,0) {\tiny $a$};
+    \node[below] at (3.6,0) {\tiny $b$};
+    \node at (2.1,-1.85) {\small Seção em anel: $A(x) = \pi\big(R^2 - r^2\big)$};
+\end{tikzpicture}
+\end{center}
+
+% ==============================================================================
+% 9. EXTRA (VISTO EM AULA, FORA DAS LISTAS)
+% ==============================================================================
+\section{Tópicos Extras Vistos em Aula (Partes, Trig.\ e Subst.\ Trigonométrica)}
+
+\subsection{Integração por Partes}
+Nasce da regra do produto: $d(uv) = u\,dv + v\,du$.
+\begin{teo}[Fórmula de Integração por Partes (nas duas notações)]
+    \[
+        \underbrace{\int u\,dv = u \cdot v - \int v\,du}_{\text{Notação padrão dos livros}} \qquad \Longleftrightarrow \qquad
+        \underbrace{\int v\,du = u \cdot v - \int u\,dv}_{\text{Notação usada no caderno de aula}}
+    \]
+\end{teo}
+
+\begin{dica}[Como escolher quem derivar e quem integrar: regra LIATE]
+    Escolha para derivar ($u$ na notação padrão; $v$ na notação do caderno) o que aparecer \textbf{primeiro} na lista:
+    \begin{center}
+    \textbf{L}ogarítmicas ($\ln x$) $\;\succ\;$
+    \textbf{I}nversas trig.\ ($\arctg x$) $\;\succ\;$
+    \textbf{A}lgébricas ($x^n$) $\;\succ\;$
+    \textbf{T}rigonométricas ($\sen x, \cos x$) $\;\succ\;$
+    \textbf{E}xponenciais ($e^x$)
+    \end{center}
+    \begin{itemize}
+        \item \textbf{Dica de prova:} nunca coloque a constante $+C$ ao integrar $dv \to v$ no passo intermediário; ela só vai no final (se colocar, ela cancela como visto no caderno).
+        \item \textbf{Método tabular (atalho para $x^n e^{kx}$ ou $x^n \sen(kx)$):} faça uma coluna derivando o polinômio até $0$, outra integrando o resto o mesmo número de vezes, e multiplique na diagonal alternando os sinais $+, -, +, -, \dots$
+        \item \textbf{Caso cíclico (ex.: $\int e^{ax}\sen(bx)\,dx$):} integre por partes \textbf{duas vezes} mantendo a mesma escolha (sempre derive a trigonométrica ou sempre a exponencial). A integral original $I$ reaparece do lado direito com sinal oposto; passe-a para o lado esquerdo e isole $I$!
+    \end{itemize}
+\end{dica}
+
+\subsection{Potências de Seno e Cosseno}
+\begin{itemize}
+    \item $\displaystyle \int \sen^m x \cos^n x \, dx$:
+          \begin{itemize}
+              \item \textbf{Se $m$ é ímpar:} separe um $\sen x\,dx$, troque o restante $\sen^{m-1}x$ usando $\sen^2 x = 1 - \cos^2 x$ e faça $u = \cos x$.
+              \item \textbf{Se $n$ é ímpar:} separe um $\cos x\,dx$, troque o restante $\cos^{n-1}x$ usando $\cos^2 x = 1 - \sen^2 x$ e faça $u = \sen x$.
+              \item \textbf{Se ambos são pares:} reduza o grau com $\displaystyle \sen^2 x = \frac{1 - \cos(2x)}{2}$ e $\displaystyle \cos^2 x = \frac{1 + \cos(2x)}{2}$.
+          \end{itemize}
+\end{itemize}
+
+\subsection{Substituição Trigonométrica}
+\begin{tabular}{>{$\displaystyle}l<{$} @{\qquad} >{$\displaystyle}l<{$} @{\qquad} >{$\displaystyle}l<{$} @{\qquad} >{$\displaystyle}l<{$}}
+\toprule
+\text{Raiz no integrando} & \text{Substituição} & \text{Diferencial} & \text{Identidade usada} \\
+\midrule
+\sqrt{a^2 - u^2} & u = a\sen\theta \quad (-\tfrac{\pi}{2} \le \theta \le \tfrac{\pi}{2}) & du = a\cos\theta\,d\theta & \sqrt{a^2 - u^2} = a\cos\theta \\
+\sqrt{a^2 + u^2} & u = a\tg\theta \quad (-\tfrac{\pi}{2} < \theta < \tfrac{\pi}{2}) & du = a\sec^2\theta\,d\theta & \sqrt{a^2 + u^2} = a\sec\theta \\
+\sqrt{u^2 - a^2} & u = a\sec\theta & du = a\sec\theta\tg\theta\,d\theta & \sqrt{u^2 - a^2} = \pm a\tg\theta \\
+\bottomrule
+\end{tabular}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.85]
+    % Triangulo 1: sqrt(a^2 - u^2)
+    \draw[thick] (0,0) -- (2.4,0) -- (2.4,1.5) -- cycle;
+    \draw (2.2,0) -- (2.2,0.2) -- (2.4,0.2);
+    \node[below] at (1.2,0) {\footnotesize $\sqrt{a^2-u^2}$};
+    \node[right] at (2.4,0.75) {\footnotesize $u$};
+    \node[above left] at (1.2,0.8) {\footnotesize $a$};
+    \node at (0.55,0.2) {\footnotesize $\theta$};
+    \node at (1.2,-0.65) {\footnotesize $\sen\theta = \frac{u}{a}$};
+
+    % Triangulo 2: sqrt(a^2 + u^2)
+    \begin{scope}[xshift=4.8cm]
+    \draw[thick] (0,0) -- (2.4,0) -- (2.4,1.5) -- cycle;
+    \draw (2.2,0) -- (2.2,0.2) -- (2.4,0.2);
+    \node[below] at (1.2,0) {\footnotesize $a$};
+    \node[right] at (2.4,0.75) {\footnotesize $u$};
+    \node[above left] at (1.2,0.8) {\footnotesize $\sqrt{a^2+u^2}$};
+    \node at (0.55,0.2) {\footnotesize $\theta$};
+    \node at (1.2,-0.65) {\footnotesize $\tg\theta = \frac{u}{a}$};
+    \end{scope}
+
+    % Triangulo 3: sqrt(u^2 - a^2)
+    \begin{scope}[xshift=9.6cm]
+    \draw[thick] (0,0) -- (2.4,0) -- (2.4,1.5) -- cycle;
+    \draw (2.2,0) -- (2.2,0.2) -- (2.4,0.2);
+    \node[below] at (1.2,0) {\footnotesize $a$};
+    \node[right] at (2.4,0.75) {\footnotesize $\sqrt{u^2-a^2}$};
+    \node[above left] at (1.2,0.8) {\footnotesize $u$};
+    \node at (0.55,0.2) {\footnotesize $\theta$};
+    \node at (1.2,-0.65) {\footnotesize $\sec\theta = \frac{u}{a}$};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+\emph{Como voltar para $x$:} monte o triângulo retângulo correspondente (Soh-Cah-Toa) e leia diretamente $\sen\theta$, $\cos\theta$, $\tg\theta$, etc.\ pelos catetos e hipotenusa!
+
+% ==============================================================================
+% 10. COMO ESCOLHER A TECNICA E CHECKLIST DE PROVA
+% ==============================================================================
+\section{Como Escolher a Técnica, Checklist de Prova e Erros Comuns}
+
+\begin{dica}[Fluxograma de decisão: qual técnica usar na integral?]
+    \begin{enumerate}
+        \item \textbf{Sai direto da tabela?} (potência, $1/x$, $e^x$, $\sen x$, $\cos x$, $\sec^2 x$...) $\implies$ \textbf{Integração imediata}.
+        \item \textbf{Dá para reescrever como soma de potências ou exponenciais?} (raízes, $1/x^n$, produto para distribuir, fração com monômio embaixo) $\implies$ \textbf{Álgebra primeiro, depois F1--F4}.
+        \item \textbf{Fração racional com $\operatorname{grau}(\text{num}) \ge \operatorname{grau}(\text{den})$?} $\implies$ \textbf{Divisão de polinômios} primeiro.
+        \item \textbf{Tem "uma função dentro de outra" E a derivada do recheio está multiplicando?} (ou falta só uma constante) $\implies$ \textbf{Substituição ($u$-sub)}.
+        \item \textbf{Tem produto de funções de tipos diferentes sem derivada uma da outra?} (ex.: $x e^x$, $x \cos x$, $\ln x$) $\implies$ \textbf{Integração por Partes} (LIATE).
+        \item \textbf{Tem $\sqrt{a^2 - u^2}$, $\sqrt{a^2 + u^2}$ ou $\sqrt{u^2 - a^2}$ sem $u'$ fora?} $\implies$ \textbf{Substituição Trigonométrica}.
+    \end{enumerate}
+\end{dica}
+
+\begin{cuidado}[Checklist final e os 10 erros mais comuns na Prova 2]
+    \begin{enumerate}
+        \item \textbf{Esquecer o $+C$} na integral indefinida (e o $dx$ ao armar a integral).
+        \item \textbf{Esquecer de trocar os limites} na substituição de integral definida (ou esquecer de voltar para $x$ antes de avaliar).
+        \item \textbf{Esquecer o módulo} em $\int \frac{du}{u} = \ln|u| + C$.
+        \item \textbf{Inventar regra do produto/quociente na integral:} $\int f \cdot g \, dx \neq \int f \, dx \cdot \int g \, dx$ e $\int \frac{f}{g}\,dx \neq \frac{\int f\,dx}{\int g\,dx}$!
+        \item \textbf{Confundir $\int x^{-n}\,dx$ com $\ln$:} $\ln|x|$ só vale para $n=1$ ($\int x^{-1}\,dx$)! Para $n \neq 1$, use a regra da potência!
+        \item \textbf{Usar graus em vez de radianos} ao avaliar $\sen, \cos, \tg$ em integrais definidas.
+        \item \textbf{Área dando negativa:} indica que você colocou "de baixo $-$ de cima" invertido, ou esqueceu de quebrar a integral quando a curva cruza o eixo/outra curva.
+        \item \textbf{Não conferir derivando:} toda integral indefinida pode (e deve!) ser conferida derivando o resultado.
+        \item \textbf{Esquecer que $a < b$ e que $F(b) - F(a)$ é topo menos base} (cuidado com sinal menos duplo ao substituir limite negativo!).
+        \item \textbf{Unidades na resposta:} escreva \textbf{u.a.} para área e \textbf{u.v.} para volume (e não esqueça do $\pi$ no volume!).
+    \end{enumerate}
+\end{cuidado}
+
+% ==============================================================================
+% 11. RESOLUCAO DA PROVA ANTERIOR (CONDICIONAL)
+% ==============================================================================
+\ifresolucao
+\clearpage
+\section*{Resolução Comentada da Prova 2 (Semestre Anterior)}
+\addcontentsline{toc}{section}{Resolução Comentada da Prova 2 (Semestre Anterior)}
+
+\begin{cuidado}[AVISO IMPORTANTE ANTES DE IMPRIMIR]
+    Esta seção contém \textbf{exemplos com números}, o que \textbf{não é permitido} na cola durante a prova!
+    Ela foi incluída para você estudar passo a passo. \textbf{Antes de gerar o PDF para levar na prova}, mude a linha \verb|\resolucaotrue| para \verb|\resolucaofalse| no início do arquivo \texttt{.tex}.
+\end{cuidado}
+
+\subsection*{Questão 1 (4 pontos) -- Resolva as integrais:}
+
+\textbf{1a)} $\displaystyle \int (4x^3 - 2x + 5)\,dx$ \quad \textit{(Técnica: Propriedades F1--F4 / potência imediata)}
+\begin{align*}
+    \int (4x^3 - 2x + 5)\,dx &= 4\int x^3\,dx - 2\int x^1\,dx + \int 5\,dx \\
+    &= 4\cdot\frac{x^4}{4} - 2\cdot\frac{x^2}{2} + 5x + C \\
+    &= \boxed{x^4 - x^2 + 5x + C}.
+\end{align*}
+\textit{Conferência:} $(x^4 - x^2 + 5x + C)' = 4x^3 - 2x + 5$. \checkmark
+
+\medskip
+\textbf{1b)} $\displaystyle \int \frac{x^2 + 2}{\sqrt{x}}\,dx$ \quad \textit{(Técnica: Reescrever raiz como potência + separar monômio do denominador)}
+\begin{align*}
+    \int \frac{x^2 + 2}{\sqrt{x}}\,dx &= \int \left(\frac{x^2}{x^{1/2}} + \frac{2}{x^{1/2}}\right)dx = \int \left(x^{2 - 1/2} + 2x^{-1/2}\right)dx = \int \left(x^{3/2} + 2x^{-1/2}\right)dx \\
+    &= \frac{x^{5/2}}{5/2} + 2\cdot\frac{x^{1/2}}{1/2} + C = \boxed{\frac{2}{5}x^{5/2} + 4x^{1/2} + C} \quad \left(= \frac{2}{5}\sqrt{x^5} + 4\sqrt{x} + C\right).
+\end{align*}
+
+\medskip
+\textbf{1c)} $\displaystyle \int 3x^2 e^{x^3}\,dx$ \quad \textit{(Técnica: Substituição com $u = x^3$)}
+\begin{itemize}
+    \item Faça $u = x^3 \implies du = 3x^2\,dx \implies dx = \dfrac{du}{3x^2}$.
+    \item Substituindo: $\displaystyle \int \cancel{3x^2}\,e^u \cdot \frac{du}{\cancel{3x^2}} = \int e^u\,du = e^u + C = \boxed{e^{x^3} + C}$.
+\end{itemize}
+
+\medskip
+\textbf{1d)} $\displaystyle \int \frac{\sen x}{\cos^2 x}\,dx$ \quad \textit{(Técnica: Substituição com $u = \cos x$ OU identidade trigonométrica)}
+\begin{itemize}
+    \item \textbf{Modo 1 (Substituição):} Faça $u = \cos x \implies du = -\sen x\,dx \implies dx = -\dfrac{du}{\sen x}$.
+          \[
+              \int \frac{\cancel{\sen x}}{u^2}\left(-\frac{du}{\cancel{\sen x}}\right) = -\int u^{-2}\,du = -\left(\frac{u^{-1}}{-1}\right) + C = \frac{1}{u} + C = \frac{1}{\cos x} + C = \boxed{\sec x + C}.
+          \]
+    \item \textbf{Modo 2 (Identidade direta):} $\displaystyle \frac{\sen x}{\cos^2 x} = \frac{1}{\cos x}\cdot\frac{\sen x}{\cos x} = \sec x \tg x \implies \int \sec x \tg x\,dx = \boxed{\sec x + C}$.
+\end{itemize}
+
+\subsection*{Questão 2 (4 pontos) -- Resolva as integrais definidas:}
+
+\textbf{2a)} $\displaystyle \int_{0}^{1} (4x^3 - 2x)\,dx$ \quad \textit{(Técnica: Potência imediata + TFC)}
+\[
+    \int_{0}^{1} (4x^3 - 2x)\,dx = \Big[ x^4 - x^2 \Big]_{0}^{1} = (1^4 - 1^2) - (0^4 - 0^2) = 0 - 0 = \boxed{0}.
+\]
+\textit{Por que deu zero?} Não é erro! Entre $0$ e $1/\sqrt{2}$, $4x^3 - 2x < 0$ (área negativa); entre $1/\sqrt{2}$ e $1$, $4x^3 - 2x > 0$ (área positiva). As áreas líquidas têm mesmo módulo e se cancelam.
+
+\medskip
+\textbf{2b)} $\displaystyle \int_{-2}^{0} 2x\sqrt{4 - x^2}\,dx$ \quad \textit{(Técnica: Substituição com troca de limites)}
+\begin{itemize}
+    \item Faça $u = 4 - x^2 \implies du = -2x\,dx \implies -du = 2x\,dx$.
+    \item \textbf{Troca dos limites:} quando $x = -2 \implies u = 4 - (-2)^2 = 0$; \quad quando $x = 0 \implies u = 4 - 0^2 = 4$.
+    \item Calculando:
+          \[
+              \int_{-2}^{0} 2x\sqrt{4-x^2}\,dx = -\int_{0}^{4} u^{1/2}\,du = -\left[\frac{2}{3}u^{3/2}\right]_{0}^{4} = -\frac{2}{3}\left(4^{3/2} - 0\right) = -\frac{2}{3}\cdot 8 = \boxed{-\frac{16}{3}}.
+          \]
+    \item \textit{Conferência voltando para $x$:} $\displaystyle \left[-\frac{2}{3}(4-x^2)^{3/2}\right]_{-2}^{0} = -\frac{2}{3}(4)^{3/2} - 0 = -\frac{16}{3}$. (Negativo porque $2x \le 0$ e $\sqrt{4-x^2} \ge 0$ em $[-2,0]$).
+\end{itemize}
+
+\medskip
+\textbf{2c)} $\displaystyle \int_{0}^{1} 3e^{3x}\,dx$ \quad \textit{(Técnica: Substituição $u = 3x$ ou regra do $a$ + TFC)}
+\[
+    \int_{0}^{1} 3e^{3x}\,dx = \Big[ e^{3x} \Big]_{0}^{1} = e^{3\cdot 1} - e^{3\cdot 0} = \boxed{e^3 - 1} \quad (\approx 19{,}09).
+\]
+\textit{Atenção:} $e^0 = 1$ (NÃO é zero!). Muita gente perde ponto aqui achando que $e^0 = 0$.
+
+\medskip
+\textbf{2d)} $\displaystyle \int_{1}^{4} \sqrt{\frac{3}{x}}\,dx$ \quad \textit{(Técnica: Propriedade de radical + potência + TFC)}
+\[
+    \int_{1}^{4} \sqrt{\frac{3}{x}}\,dx = \sqrt{3}\int_{1}^{4} x^{-1/2}\,dx = \sqrt{3}\,\Big[ 2x^{1/2} \Big]_{1}^{4} = \sqrt{3}\left(2\sqrt{4} - 2\sqrt{1}\right) = \sqrt{3}(4 - 2) = \boxed{2\sqrt{3}} \quad (\approx 3{,}46).
+\]
+
+\subsection*{Questão 3 (2 pontos) -- Faça o gráfico e calcule a área da região compreendida entre:}
+
+\textbf{3a)} $x = 2$; \quad $y = x^2 + x$ \quad e \quad $y = 0$.
+\begin{itemize}
+    \item \textbf{Interseções e formato:} A parábola $y = x^2 + x = x(x+1)$ tem concavidade para cima e raízes em $x = -1$ e $x = 0$. A reta $y = 0$ é o eixo $x$, e $x = 2$ é uma reta vertical.
+    \item A região fechada simultaneamente por todas as três fronteiras ($y = x^2 + x$, $y = 0$ e $x = 2$) vai de $x = 0$ até $x = 2$, com a parábola acima do eixo $x$:
+          \[
+              A = \int_{0}^{2} (x^2 + x)\,dx = \left[\frac{x^3}{3} + \frac{x^2}{2}\right]_{0}^{2} = \left(\frac{8}{3} + \frac{4}{2}\right) - 0 = \frac{8}{3} + 2 = \boxed{\frac{14}{3} \text{ u.a.}} \quad (\approx 4{,}67 \text{ u.a.}).
+          \]
+    \item \textit{Observação importante:} O "laço" entre $x=-1$ e $x=0$ fica abaixo do eixo $x$ e não toca a reta $x=2$; por isso não pertence à região limitada pelas três curvas. (Caso alguém somasse esse trecho extra de área $\left|-\frac{1}{6}\right| = \frac{1}{6}$, daria $\frac{29}{6}$).
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=8cm, height=5.2cm,
+    axis lines=middle,
+    xmin=-1.5, xmax=2.5,
+    ymin=-0.8, ymax=6.8,
+    xlabel={$x$}, ylabel={$y$},
+    xtick={-1,0,1,2}, ytick={0,2,4,6},
+    samples=100
+]
+    \addplot[fill=blue!20, draw=none, domain=0:2] {x^2 + x} \closedcycle;
+    \addplot[blue!75!black, thick, domain=-1.4:2.25] {x^2 + x} node[pos=0.92, left] {$y=x^2+x$};
+    \addplot[red!75!black, thick, dashed] coordinates {(2,-0.5) (2,6.5)} node[pos=0.85, right] {$x=2$};
+    \node[blue!60!black] at (1.35,1.2) {\small $A = \frac{14}{3}$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\textbf{3b)} $x = 0$; \quad $y = 3$ \quad e \quad $y = \sqrt{x}$.
+\begin{itemize}
+    \item \textbf{Interseções:} A reta $x=0$ é o eixo $y$. Igualando $y = \sqrt{x}$ e $y = 3$: $\sqrt{x} = 3 \implies x = 9$.
+    \item \textbf{Modo 1 (em $dx$, de cima menos de baixo):} em $[0,9]$, a reta $y=3$ está acima de $y=\sqrt{x}$:
+          \[
+              A = \int_{0}^{9} (3 - \sqrt{x})\,dx = \left[3x - \frac{2}{3}x^{3/2}\right]_{0}^{9} = \left(3\cdot 9 - \frac{2}{3}\cdot 9^{3/2}\right) - 0 = 27 - \frac{2}{3}\cdot 27 = 27 - 18 = \boxed{9 \text{ u.a.}}
+          \]
+    \item \textbf{Modo 2 (em $dy$, ainda mais rápido!):} isolando $x$ em $y=\sqrt{x} \implies x = y^2$, com $y$ variando de $0$ a $3$:
+          \[
+              A = \int_{0}^{3} y^2\,dy = \left[\frac{y^3}{3}\right]_{0}^{3} = \frac{27}{3} - 0 = \boxed{9 \text{ u.a.}}
+          \]
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=8cm, height=4.8cm,
+    axis lines=middle,
+    xmin=-0.6, xmax=10.5,
+    ymin=-0.4, ymax=3.8,
+    xlabel={$x$}, ylabel={$y$},
+    xtick={0,3,6,9}, ytick={0,1,2,3},
+    samples=100
+]
+    \addplot[name path=A, blue!75!black, thick, domain=0:10] {sqrt(x)} node[pos=0.92, below right] {$y=\sqrt{x}$};
+    \addplot[name path=B, red!75!black, thick, domain=0:10] {3} node[pos=0.85, above] {$y=3$};
+    \addplot[blue!20] fill between[of=A and B, soft clip={domain=0:9}];
+    \filldraw[black] (9,3) circle (1.5pt) node[above left] {$(9,3)$};
+    \node[blue!60!black] at (3,2.2) {\small $A = 9$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{dica}[Como estudar com esta prova (mapa direto para as listas)]
+    \begin{itemize}
+        \item \textbf{Q1a e Q1b:} Lista p.\ 294 (Ex.\ 1--13 e 25) -- reescrever raízes e separar fração com monômio embaixo.
+        \item \textbf{Q1c e Q1d:} Lista p.\ 302 (Ex.\ 1--10) + Lista p.\ 294 (Ex.\ 31) -- substituição direta e identidades trigonométricas.
+        \item \textbf{Q2a--Q2d:} Lista p.\ 351 (Ex.\ 1--10) + Lista p.\ 462 (Ex.\ 29) -- integral definida, troca de limites e exponencial.
+        \item \textbf{Q3a e Q3b:} Lista p.\ 359 (Ex.\ 1--10) -- esboço de gráfico e área entre curvas.
+        \item \textbf{O que NÃO caiu nesta prova mas ESTÁ nas listas:} derivadas de exponenciais (p.\ 462, Ex.\ 1--11) e \textbf{volumes de revolução} (p.\ 382, Ex.\ 2, 3, 5, 6, 8, 9). Estude esses dois tópicos com atenção extra!
+    \end{itemize}
+\end{dica}
+\fi
+
+\end{document}

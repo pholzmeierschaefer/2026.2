@@ -47,4 +47,16 @@ const Emprestimo = sequelize.define(
     },
 );
 
+Emprestimo.associate = (models) => {
+    Emprestimo.belongsTo(models.Livro, {
+        foreignKey: "livroID",
+        as: "livro",
+    });
+
+    Emprestimo.belongsTo(models.Leitor, {
+        foreignKey: "leitorID",
+        as: "leitor",
+    });
+}
+
 module.exports = Emprestimo;

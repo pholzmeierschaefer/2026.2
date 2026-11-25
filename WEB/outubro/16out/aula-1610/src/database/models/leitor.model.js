@@ -41,4 +41,11 @@ const Leitor = sequelize.define(
     },
 );
 
+Leitor.associate = (models) => {
+    Leitor.hasMany(models.Emprestimo, {
+        foreignKey: "leitorID",
+        as: "emprestimos",
+    });
+}
+
 module.exports = Leitor;
